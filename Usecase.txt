@@ -40,7 +40,7 @@ Sequence:
 1.) Puts the welcome Message
 2.) Puts the Selection Screen.
 	2a.) If Single player is selected, create a new board with [Player, AI] player Array
-	2b.) If Multi player is selected, create a new baord with [Player, Player] player Array
+	2b.) If Multi player is selected, create a new board with [Player, Player] player Array
 	2c.) If Load is selected, set the board to the Board Loaded from the save file.
 	2d.) if exit is selected, exit the game.
 LOOP START
