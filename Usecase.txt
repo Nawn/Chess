@@ -42,4 +42,22 @@ Sequence:
 	2a.) If Single player is selected, create a new board with [Player, AI] player Array
 	2b.) If Multi player is selected, create a new baord with [Player, Player] player Array
 	2c.) If Load is selected, set the board to the Board Loaded from the save file.
-	2d.) if exit is selected, exit the game. 
+	2d.) if exit is selected, exit the game.
+LOOP START
+3.) Board.turn will take the next player in queue to take a turn
+4.) The player who's turn it is will have their board displayed
+5.) The player will then enter Coordinates of the Piece they wish to move
+	5a.) If the coordinate is either empty, or invalid raise an Error.
+	5b.) Invalid means either not our piece, or no moves available.
+	5c.) If input is "save" then we will place the player back to the front of the queue, and save the state of the board. Then remove the player from the front of the board so they can continue playing or exit
+6.) If valid, it will return an array of coordinates where they can move the Board
+7.) Clean that array of coordinates that are invalid moves.
+	7a.) If there are no legal moves to make, raise an Error
+	7b.) Return to Piece selection
+8.) Display the board again, with marks displaying legal moves for that piece.
+9.) Have the player select the position to move the piece to.
+	9a.) If the player selects 'Back' have the player go back to Piece select
+10.) Move the piece to that position
+11.) Once the turn is over, add the player to the back of the queue
+12.) End of loop, checking for Victory, or Stalemate
+13.) If the game is not over, have the next player take the turn, and repeat this until there is a checkmate/tie
