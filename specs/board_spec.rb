@@ -83,8 +83,8 @@ describe Board do
       expect(@board.rows[0][0]).to be_instance_of(Rook)
       expect(@board.rows[0][1]).to be_instance_of(Knight)
       expect(@board.rows[0][2]).to be_instance_of(Bishop)
-      expect(@board.rows[0][4]).to be_instance_of(King)
       expect(@board.rows[0][3]).to be_instance_of(Queen)
+      expect(@board.rows[0][4]).to be_instance_of(King)
       all_pawn = @board.rows[1].all? {|pawn| pawn.is_a? Pawn}
       expect(all_pawn).to be true
     end
