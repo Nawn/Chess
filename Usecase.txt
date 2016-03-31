@@ -33,4 +33,13 @@ As for the gameplay, it will begin with the White player. The game will take tur
 
 for each turn [Player, Player2] take the first player, show them their display (Which will have the board with their pieces at the bottom of the board.), and then ask for input, where the player will input the Coordinates of the piece that they would like to control. At any point, the player may select "save" which will put the player back into the Array, and save the state of the baord in YAML, then get the player and continue to ask which coordinate. Once selected, if it's a correct coordinate, we will mark the potential positions for this piece on the map, and ask the player to select one of the coordinates displayed to move the piece, or type "back" to go back to piece select. Once typed, it will move the piece to the location. Once turn is complete, add the current player back to the end of the Player arrays
 
-Once complete, it will print "#{Player} has won! Checkmate!" or "Stalemate! Tie between both players"
+Once complete, it will print "#{Player} has won! Checkmate!" or "Stalemate! Tie between both players" and ask if they would like to play again. If the response is "No" or similar, then the game is over. Anything else, and they will be sent back to the Selection Menu.
+
+Sequence:
+
+1.) Puts the welcome Message
+2.) Puts the Selection Screen.
+	2a.) If Single player is selected, create a new board with [Player, AI] player Array
+	2b.) If Multi player is selected, create a new baord with [Player, Player] player Array
+	2c.) If Load is selected, set the board to the Board Loaded from the save file.
+	2d.) if exit is selected, exit the game. 
