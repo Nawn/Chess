@@ -75,5 +75,18 @@ describe Board do
       expect(back_pieces).to be true
       expect(mid_spaces).to be true
     end
+
+    it "Has rows filled with Rooks, Knights, Bishops, King and Queen" do
+      @board = Board.new
+      expect(@board.rows).to be_instance_of(Array)
+
+      expect(@board.rows[0][0]).to be_instance_of(Rook)
+      expect(@board.rows[0][1]).to be_instance_of(Knight)
+      expect(@board.rows[0][2]).to be_instance_of(Bishop)
+      expect(@board.rows[0][4]).to be_instance_of(King)
+      expect(@board.rows[0][3]).to be_instance_of(Queen)
+      all_pawn = @board.rows[1].all? {|pawn| pawn.is_a? Pawn}
+      expect(all_pawn).to be true
+    end
   end
 end
