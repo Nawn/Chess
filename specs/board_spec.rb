@@ -22,8 +22,8 @@ describe Board do
       context "and input is invalid type" do
         it "raises ArgumentError" do
           expect{Board.new("multiplayer")}.to raise_error(ArgumentError, "Incorrect input")
-          expect{Board.new(5)}.to raise_error(ArgumentError, "Incorect input")
-          expect{Board.new(['poop'])}.to raise_error(ArgumentError, "Incorect input")
+          expect{Board.new(5)}.to raise_error(ArgumentError, "Incorrect input")
+          expect{Board.new(['poop'])}.to raise_error(ArgumentError, "Incorrect input")
         end
       end
 
@@ -67,9 +67,9 @@ describe Board do
 
       expect(@board.rows).to be_instance_of(Array)
 
-      pieces = @board.rows[0..1].each {|array| array.all? {|piece| piece.is_a? Piece}}
-      back_pieces = @board.rows[-1..-2].each {|array| array.all? {|piece| piece.is_a? Piece}}
-      mid_spaces = @board.rows[2..5].each {|array| array.all? {|space| space == " "}}
+      pieces = @board.rows[0..1].all? {|array| array.all? {|piece| piece.is_a? Piece}}
+      back_pieces = @board.rows[-1..-2].all? {|array| array.all? {|piece| piece.is_a? Piece}}
+      mid_spaces = @board.rows[2..5].all? {|array| array.all? {|space| space == " "}}
 
       expect(pieces).to be true
       expect(back_pieces).to be true
