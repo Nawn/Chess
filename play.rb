@@ -14,11 +14,12 @@ until select
 
   case menu_select(gets.chomp)
   when 1
-    puts "AI Not implemented yet"
+    puts "Creating board with AI..."
+    #board = Board.new(:singleplayer)
     select = true
   when 2
     puts "Creating Board for 2 players..."
-    board = Board.new(:multiplayer)
+    #board = Board.new(:multiplayer)
     select = true
   when 3
     puts "Save/Load not implemented yet"
