@@ -50,4 +50,22 @@ describe Piece do
       end
     end
   end
+
+  describe "#team_color" do
+    before(:each) do
+      @piece = Piece.new(:white)
+    end
+
+    it "returns a Symbol" do
+      expect(@piece.team_color).to be_instance_of(Symbol)
+    end
+
+    it "is set to initialized value" do
+      white_piece = Piece.new(:white)
+      black_piece = Piece.new(:black)
+
+      expect(white_piece.team_color).to eql(:white)
+      expect(black_piece.team_color).to eql(:black)
+    end
+  end
 end
