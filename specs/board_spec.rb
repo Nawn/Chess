@@ -62,6 +62,18 @@ describe Board do
       end
     end
 
-    #Create tests for rows containing pieces
+    it "has rows populated with Pieces in first 2 and last 2 rows" do
+      @board = Board.new
+
+      expect(@board.rows).to be_instance_of(Array)
+
+      pieces = @board.rows[0..1].each {|array| array.all? {|piece| piece.is_a? Piece}}
+      back_pieces = @board.rows[-1..-2].each {|array| array.all? {|piece| piece.is_a? Piece}}
+      mid_spaces = @board.rows[2..5].each {|array| array.all? {|space| space == " "}}
+
+      expect(pieces).to be true
+      expect(back_pieces).to be true
+      expect(mid_spaces).to be true
+    end
   end
 end

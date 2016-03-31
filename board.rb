@@ -1,5 +1,6 @@
 require 'terminal-table'
 require_relative 'player.rb'
+require_relative 'piece.rb'
 
 class Board
   attr_reader :table
