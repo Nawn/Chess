@@ -1,0 +1,27 @@
+Chess UseCase
+
+Actors:
+	2 Players
+	1 Board
+	32 Pieces
+
+When you open the program, it will say: 
+"Thank you for playing Chess. Please
+select option:
+	1. Single Player
+	2. Multiplayer
+	3. Load
+	4. Exit"
+
+The first two options will create a new board instance:
+	Single player will create a board with 1 Player Object, 1 Artificial<Player Object and a board with a new setup.
+
+	Multiplayer will create a board with 2 Player Objects. As well as a board with a new board setup.
+
+	Load will load from the 'save-file.yml' in the main directory. If the file does not exist, then it will prompt back to the main options list.
+
+	Exit simply exits the game.
+
+As for the gameplay, it will begin with the White player. The game will take turns for each player. One each until either a checkmate takes place, or a stalemate takes place. 
+
+for each turn [Player, Player2] take the first player, show them their display (Which will have the board with their pieces at the bottom of the board.), and then ask for input, where the player will input the Coordinates of the piece that they would like to control. At any point, the player may select "save" which will put the player back into the Array, and save the state of the baord in YAML. Once selected, if it's a correct coordinate, we will mark the potential positions for this piece on the map, and ask the player to select one of the coordinates displayed to move the piece, or type "back" to go back to piece select. 
