@@ -76,10 +76,6 @@ describe Board do
       end
     end
 
-    it "contains an empty board" do
-      @board = Board.new
-      expect(@board.table).to be_instance_of(Board)
-      expect(@board.table).to eql(example())
-    end
+    #Create tests for rows containing pieces
   end
 end
