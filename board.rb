@@ -9,9 +9,9 @@ class Board
     raise ArgumentError.new("Incorrect input") unless input_symbol.is_a? Symbol
     case input_symbol
     when :multiplayer
-      @players = [Player.new, Player.new]
+      @players = [Player.new(:white, self), Player.new(:black, self)]
     when :singleplayer
-      @players = [Player.new, Artificial.new]
+      @players = [Player.new(:white, self), Artificial.new(:black, self)]
     else
       raise ArgumentError.new("#{input_symbol.to_s} is not acceptable input")
     end

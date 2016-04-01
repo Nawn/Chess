@@ -41,7 +41,7 @@ describe Player do
 
   describe "#team_color" do
     before(:each) do
-      @player = Board.new(:white, Board.new)
+      @player = Player.new(:white, Board.new)
     end
 
     it "is set to Symbol initialzied and can be read" do
