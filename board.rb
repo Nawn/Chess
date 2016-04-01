@@ -27,8 +27,8 @@ class Board
   def new_board
     empty_row = Array.new(8, " ")
     final_row = []
-    final_row[0], final_row[7] = war_row(:black), war_row(:white)
-    final_row[1], final_row[6] = pawn_row(:black), pawn_row(:white)
+    final_row[0], final_row[7] = war_row(@players[1].team_color), war_row(@players[0].team_color)
+    final_row[1], final_row[6] = pawn_row(@players[1].team_color), pawn_row(@players[0].team_color)
     2.upto(5) do |index|
       final_row[index] = empty_row.clone
     end
