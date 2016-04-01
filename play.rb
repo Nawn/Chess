@@ -1,9 +1,9 @@
 require_relative 'board.rb'
 
 def menu_select(input)
-  player_input = input.gsub(/\s+/, "")
-  exit if player_input == "exit"
-  player_input[0].to_i
+  player_input = input.gsub(/\s+/, "") #Cleanse input of white spaces
+  exit if player_input == "exit" #Exit the game
+  player_input[0].to_i #Return the first character, and make it a number
 end
 
 puts "Thanks for playing Chess!"
