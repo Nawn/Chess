@@ -89,4 +89,83 @@ describe Board do
       expect(all_pawn).to be true
     end
   end
+
+  describe "#view" do
+    before(:each) do
+      @board = Board.new
+    end
+
+    it "does not take input" do
+      expect{@board.view(:white)}.to raise_error(ArgumentError)
+    end
+
+    it "returns a symbol" do
+      expect(@board.view).to be_instance_of(Symbol)
+    end
+
+    it "is initialized as :white" do
+      expect(@board.view).to eql(:white)
+    end
+
+    it "can be accessed and changed" do
+      expect{@board.view = :black}.not_to raise_error
+    end
+  end
+
+  describe "#flip" do
+    before(:each) do
+      @board = Board.new
+    end
+
+    context "when given no input" do
+      it "flips the board" do
+        expect(@board.rows[0][0].team_color).to eql(:black)
+        @board.flip
+        expect(@board.rows[0][0].team_color).to eql(:white)
+      end
+    end
+
+    context "when given input" do
+      context "and input is invalid data type" do
+        it "raises ArgumentError" do
+          expect{@board.flip("white")}.to raise_error(ArgumentError, "Input must be symbol")
+          expect{@board.flip(5)}.to raise_error(ArgumentError, "Input must be symbol")
+          expect{@board.flip([:white])}.to raise_error(ArgumentError, "Input must be symbol")
+        end
+      end
+
+      context "and input_symbol does not exist" do
+        it "raises StandardError" do
+          expect{@board.flip(:yellow)}.to raise_error(StandardError, "Input must be :white, or :black")
+          expect{@board.flip(:blue)}.to raise_error(StandardError, "Input must be :white, or :black")
+        end
+      end
+
+      context "if input is acceptable" do
+        context "and the view is set to the input already" do
+          it "will not flip the board" do
+            expect(@board.rows[0][0].team_color).to eql(:black)
+            expect(@board.view).to eql(:white)
+            @board.flip(:white)
+            expect(@board.rows[0][0].team_color).to eql(:black)
+            expect(@board.view).to eql(:white)
+          end
+        end
+
+        context "and the board is not set to the color input" do
+          it "changes the board view to given symbol" do
+            expect(@board.view).to eql(:white)
+            @board.flip(:black)
+            expect(@board.view).to eql(:black)
+          end
+
+          it "flips the board" do
+            expect(@board.rows[0][0].team_color).to eql(:black)
+            @board.flip(:black)
+            expect(@board.rows[0][0].team_color).to eql(:white)
+          end
+        end
+      end
+    end
+  end
 end
