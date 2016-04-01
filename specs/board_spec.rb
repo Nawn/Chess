@@ -120,8 +120,13 @@ describe Board do
     context "when given no input" do
       it "flips the board" do
         expect(@board.rows[0][0].team_color).to eql(:black)
+        expect(@board.view).to eql(:white)
         @board.flip
         expect(@board.rows[0][0].team_color).to eql(:white)
+        expect(@board.view).to eql(:black)
+        @board.flip
+        expect(@board.rows[0][0].team_color).to eql(:black)
+        expect(@board.view).to eql(:white)
       end
     end
 
@@ -157,12 +162,16 @@ describe Board do
             expect(@board.view).to eql(:white)
             @board.flip(:black)
             expect(@board.view).to eql(:black)
+            @board.flip(:white)
+            expect(@board.view).to eql(:white)
           end
 
           it "flips the board" do
             expect(@board.rows[0][0].team_color).to eql(:black)
             @board.flip(:black)
             expect(@board.rows[0][0].team_color).to eql(:white)
+            @board.flip(:white)
+            expect(@board.rows[0][0].team_color).to eql(:black)
           end
         end
       end
