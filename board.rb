@@ -21,6 +21,16 @@ class Board
     @rows = new_board
   end
 
+  def flip(color_sym=nil)
+    reverse() if color_sym.nil?
+    @players.each do |player|
+      if @view != player.team_color
+        @view = player.team_color
+        break
+      end
+    end
+  end
+
   def display
     puts table()
   end
@@ -52,6 +62,12 @@ class Board
       return_row << Pawn.new(team_color)
     end
     return_row
+  end
+
+  def reverse
+    @rows.map! do |array|
+      array.reverse
+    end.reverse!
   end
 
   def table
