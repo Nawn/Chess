@@ -4,6 +4,7 @@ require_relative 'piece.rb'
 
 class Board
   attr_reader :rows, :players
+  attr_accessor :view
 
   def initialize (input_symbol = :multiplayer)
     raise ArgumentError.new("Incorrect input") unless input_symbol.is_a? Symbol
@@ -15,7 +16,8 @@ class Board
     else
       raise ArgumentError.new("#{input_symbol.to_s} is not acceptable input")
     end
-          
+
+    @view = @players[0].team_color
     @rows = new_board
   end
 
