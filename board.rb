@@ -59,12 +59,6 @@ class Board
       rows << [8-number] + temp_rows[number]
       rows << :separator
     end
-
-    #8.downto(1) do |number|
-      #rows << [number] + 
-      #rows << :separator
-    #end
-
     rows << ([" "] + Array("A".."H"))
 
     Terminal::Table.new :rows => rows
