@@ -23,13 +23,17 @@ class Board
   end
 
   def flip(color_sym=nil)
-    reverse() if color_sym.nil? #if they set no input
-    @players.each do |player| #Go through each player
-      if @view != player.team_color #And compare their color to the current view
-        #If the current view, does not match their color(Ergo, it's the next players view)
-        @view = player.team_color #Set it to it
-        break #And stop searching
+    flip_check(color_sym)
+
+    if color_sym.nil? #if they set no input
+      @players.each do |player| #Go through each player
+        if @view != player.team_color #And compare their color to the current view
+          #If the current view, does not match their color(Ergo, it's the next players view)
+          @view = player.team_color #Set it to it
+          break #And stop searching
+        end
       end
+      reverse()
     end
   end
 
@@ -51,6 +55,26 @@ class Board
       final_row[index] = empty_row.clone #Set it to empty rows
     end
     final_row #Return the "Fresh board"
+  end
+
+  def flip_check(input_symbol)
+    symbol = input_symbol.is_a? Symbol #Boolean, Check if input is Symbol
+    unless input_symbol.nil? || symbol #Unless it's appropriate input
+      raise ArgumentError.new("Input must be symbol") #Raise the error
+    end
+
+    #Unless it is someone's color, or nil(Because nil is acceptable)
+    unless @players.any? { |player| player.team_color == input_symbol} || input_symbol.nil?
+      acceptable = "" #Declare an empty string
+      @players.each_with_index do |player, index|
+        #If it's the first one, just add it
+        acceptable += ":#{player.team_color.to_s}" if index.zero? #
+        #If it's not the first one, apprend it
+        acceptable += ", or :#{player.team_color.to_s}" unless index.zero?
+      end
+      #Then raise error with it as the message
+      raise StandardError.new("Input must be #{acceptable}")
+    end
   end
 
   #War_row is the row full of Kings, Queens, Rooks, etc.
