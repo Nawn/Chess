@@ -12,7 +12,7 @@ describe Piece do
       context "and input is invalid data type or Missing parameter" do
         it "raises ArgumentError" do
           expect{Piece.new("Poopy")}.to raise_error(ArgumentError, "requires Symbol of team_color")
-          expect{Piece.new(4, "5,3")}.to raise_error(ArgumentError, "requires Symbol of team_color")
+          expect{Piece.new(4, "5,3")}.to raise_error(ArgumentError)
           expect{Piece.new(:white)}.not_to raise_error
         end
       end

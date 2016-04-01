@@ -23,27 +23,27 @@ class Board
   def new_board
     empty_row = Array.new(8, " ")
     final_row = []
-    final_row[0], final_row[7] = war_row, war_row
-    final_row[1], final_row[6] = pawn_row, pawn_row
+    final_row[0], final_row[7] = war_row(:black), war_row(:white)
+    final_row[1], final_row[6] = pawn_row(:black), pawn_row(:white)
     2.upto(5) do |index|
       final_row[index] = empty_row.clone
     end
     final_row
   end
 
-  def war_row
+  def war_row(team_color)
     return_row = []
-    return_row[0], return_row[7] = Rook.new, Rook.new
-    return_row[1], return_row[6] = Knight.new, Knight.new
-    return_row[2], return_row[5] = Bishop.new, Bishop.new
-    return_row[3], return_row[4] = Queen.new, King.new
+    return_row[0], return_row[7] = Rook.new(team_color), Rook.new(team_color)
+    return_row[1], return_row[6] = Knight.new(team_color), Knight.new(team_color)
+    return_row[2], return_row[5] = Bishop.new(team_color), Bishop.new(team_color)
+    return_row[3], return_row[4] = Queen.new(team_color), King.new(team_color)
     return_row
   end
 
-  def pawn_row
+  def pawn_row(team_color)
     return_row = []
     8.times do
-      return_row << Pawn.new
+      return_row << Pawn.new(team_color)
     end
     return_row
   end
