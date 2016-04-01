@@ -10,7 +10,12 @@ end
 
 class Pawn < Piece; end
 
-class Knight < Piece; end
+class Knight < Piece
+  def initialize(color_sym=nil)
+    super(color_sym)
+    @display = (@display.to_s + "n").to_sym 
+  end
+end
 
 class Rook < Piece; end
 

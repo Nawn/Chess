@@ -19,6 +19,10 @@ class Board
     @rows = new_board
   end
 
+  def display
+    puts table()
+  end
+
   private
   def new_board
     empty_row = Array.new(8, " ")
@@ -48,14 +52,18 @@ class Board
     return_row
   end
 
-  def empty_board
-    empty_row = Array.new(8, " ")
+  def table
     rows = []
-
-    8.downto(1) do |number|
-      rows << [number] + empty_row.clone
+    temp_rows = @rows.map { |e| e.map {|i| i.display if i.is_a? Piece } }
+    8.times do |number|
+      rows << [8-number] + temp_rows[number]
       rows << :separator
     end
+
+    #8.downto(1) do |number|
+      #rows << [number] + 
+      #rows << :separator
+    #end
 
     rows << ([" "] + Array("A".."H"))
 
