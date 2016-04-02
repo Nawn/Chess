@@ -3,8 +3,7 @@ require_relative 'player.rb'
 require_relative 'piece.rb'
 
 class Board
-  attr_reader :rows, :players
-  attr_accessor :view
+  attr_reader :rows, :players, :view
 
   def initialize (input_symbol = :multiplayer)
     raise ArgumentError.new("Incorrect input") unless input_symbol.is_a? Symbol
@@ -34,6 +33,11 @@ class Board
         end
       end
       reverse()
+    else
+      unless color_sym == @view
+        @view = color_sym
+        reverse()
+      end
     end
   end
 

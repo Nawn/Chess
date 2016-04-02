@@ -107,8 +107,9 @@ describe Board do
       expect(@board.view).to eql(:white)
     end
 
-    it "can be accessed and changed" do
-      expect{@board.view = :black}.not_to raise_error
+    it "can be read" do
+      expect{@board.view}.not_to raise_error
+      expect{@board.view = :black}.to raise_error(NoMethodError)
     end
   end
 
