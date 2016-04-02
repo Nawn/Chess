@@ -71,10 +71,8 @@ class Board
     unless @players.any? { |player| player.team_color == input_symbol} || input_symbol.nil?
       acceptable = "" #Declare an empty string
       @players.each_with_index do |player, index|
-        #If it's the first one, just add it
-        acceptable += ":#{player.team_color.to_s}" if index.zero? #
-        #If it's not the first one, apprend it
-        acceptable += ", or :#{player.team_color.to_s}" unless index.zero?
+        #If it's the first one, just add it, else, append to the rest
+        acceptable += index.zero? ? ":#{player.team_color.to_s}" : ", or :#{player.team_color.to_s}"
       end
       #Then raise error with it as the message
       raise StandardError.new("Input must be #{acceptable}")
