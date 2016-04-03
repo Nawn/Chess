@@ -103,10 +103,12 @@ describe Player do
           end
         end
 
-        it "does not raises error" do
-          expect{@player1.select("C2")}.not_to raise_error
-          expect{@player1.select("C 2")}.not_to raise_error
-          expect{@player1.select("  C  2  ")}.not_to raise_error
+        context "when input is valid" do
+          it "does not raise error" do
+            expect{@player1.select("C2")}.not_to raise_error
+            expect{@player1.select("C 2")}.not_to raise_error
+            expect{@player1.select("  C  2  ")}.not_to raise_error
+          end
         end
       end
     end
