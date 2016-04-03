@@ -71,4 +71,44 @@ describe Player do
       expect(@player.board).to eql(@board)
     end
   end
+
+  describe "#select" do
+    before(:each) do
+      @board = Board.new
+      @player1 = @board.players[0]
+      @player2 = @board.players[1]
+    end
+
+    context "when given no input" do
+      it "raises ArgumentError" do
+        expect{@player1.select()}.to raise_error(ArgumentError)
+      end
+    end
+
+    context "when given input" do
+      context "and input is not String" do
+        it "raises ArgumentError" do
+          expect{@player1.select(['poop'])}.to raise_error(ArgumentError, "Input must be String")
+          expect{@player1.select(5)}.to raise_error(ArgumentError, "Input must be String")
+          expect{@player1.select(:incorrect)}.to raise_error(ArgumentError, "Input must be String")
+        end
+      end
+
+      context "and input is string" do
+        context "but string is not valid" do
+          it "raises ArgumentError" do
+            expect{@player1.select("poop")}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+            expect{@player1.select("4C")}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+            expect{@player1.select("top left")}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+          end
+        end
+
+        it "does not raises error" do
+          expect{@player1.select("C2")}.not_to raise_error
+          expect{@player1.select("C 2")}.not_to raise_error
+          expect{@player1.select("  C  2  ")}.not_to raise_error
+        end
+      end
+    end
+  end
 end
