@@ -178,4 +178,16 @@ describe Board do
       end
     end
   end
+
+  describe "#mark" do
+    before(:each) do
+      @board = Board.new
+    end
+
+    context "when given no input" do
+      it "raises ArgumentError" do
+        expect{@board.mark()}.to raise_error(ArgumentError)
+      end
+    end    
+  end
 end
