@@ -2,6 +2,8 @@ require 'terminal-table'
 require_relative 'player.rb'
 require_relative 'piece.rb'
 
+#"\e[46m#{knight.display}\e[0m"
+
 class Board
   attr_reader :rows, :players, :view
 
