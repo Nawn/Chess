@@ -106,9 +106,9 @@ class Board
   end
 
   #Take the data in the rows, and create an ASCII board of it.
-  def table
+  def table(input_row = @rows)
     rows = []
-    temp_rows = @rows.map { |e| e.map {|i| i.display if i.is_a? Piece } }
+    temp_rows = input_row.map { |e| e.map {|i| i.display if i.is_a? Piece } }
     8.times do |number|
       rows << [8-number] + temp_rows[number]
       rows << :separator
