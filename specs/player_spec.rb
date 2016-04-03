@@ -111,7 +111,7 @@ describe Player do
           end
 
           context "when space is invalid" do
-            context "where space has enemy piece"
+            context "where space has enemy piece" do
               it "raises StandardError" do
                 expect{@player1.select("A8")}.to raise_error(StandardError, "Not your piece")
                 expect{@player1.select("C7")}.to raise_error(StandardError, "Not your piece")
