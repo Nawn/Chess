@@ -109,6 +109,41 @@ describe Player do
             expect{@player1.select("C 2")}.not_to raise_error
             expect{@player1.select("  C  2  ")}.not_to raise_error
           end
+
+          context "when space is invalid" do
+            context "where space has enemy piece"
+              it "raises StandardError" do
+                expect{@player1.select("A8")}.to raise_error(StandardError, "Not your piece")
+                expect{@player1.select("C7")}.to raise_error(StandardError, "Not your piece")
+                expect{@player2.select("A1")}.to raise_error(StandardError, "Not your piece")
+                @board.flip
+                expect{@player1.select("A1")}.to raise_error(StandardError, "Not your piece")
+                expect{@player2.select("A8")}.to raise_error(StandardError, "Not your piece")
+              end
+            end
+
+            context "where space is empty" do
+              it "raises StandardError" do
+                expect{@player1.select("C3")}.to raise_error(StandardError, "Space is empty")
+                expect{@player1.select("D6")}.to raise_error(StandardError, "Space is empty")
+                expect{@player2.select("C4")}.to raise_error(StandardError, "Space is empty")
+              end
+            end
+          end
+
+          context "when space is valid" do
+            it "returns a Piece" do
+              piece = @player1.select("A1")
+              expect(piece).to be_kind_of(Piece)
+            end
+
+            it "Returns the object in space provided" do
+              expect(@player1.select("B1")).to be_instance_of(Knight)
+              expect(@player1.select("D1")).to be_instance_of(Queen)
+              expect(@player1.select("D2")).to be_instance_of(Pawn)
+              expect(@player1.select("B1")).to eql(@board.rows[7][1])
+            end
+          end
         end
       end
     end
