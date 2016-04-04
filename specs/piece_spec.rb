@@ -69,7 +69,7 @@ describe Piece do
     end
   end
 
-  describe "#directions" do
+  describe ".directions" do
     it "can be read" do
       expect{Piece.directions}.not_to raise_error
     end
@@ -80,6 +80,27 @@ describe Piece do
 
     it "contains 4 direction Symbols" do
       expect(Piece.directions).to eql([:up,:down,:left,:right])
+    end
+  end
+
+  describe ".ping" do
+    before(:each) do
+      empty_board = Array.new(8, Array.new(8, " "))
+    end
+
+    context "when given invalid # of params" do
+      it "raises ArgumentError" do
+        expect{Piece.ping()}.to raise_error(ArgumentError)
+        expect{Piece.ping(empty_board)}.to raise_error(ArgumentError)
+        expect{Piece.ping(empty_board, "A1")}.to raise_error(ArgumentError)
+        expect{Piece.ping(empty_board, "A1", :left)}.not_to raise_error(ArgumentError)
+        expect{Piece.ping(empty_board, "A1", :left, 5)}.not_to raise_error(ArgumentError)
+        expect{Piece.ping(empty_board, "A1", :left, 0, "uhh")}.to raise_error(ArgumentError)
+      end
+    end
+
+    context "when given correct # of params" do
+      
     end
   end
 end
