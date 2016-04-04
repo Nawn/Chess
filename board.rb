@@ -24,12 +24,12 @@ class Board
   end
 
   def mark(position)
-    row, position = Player.coord_string(position)
+    row, position = Player.coord_string(position) #Run through the filter to get coordinates
     if @rows[row][position].is_a? Piece
       piece = @rows[row][position]
-      @rows[row][position] = "\e[46mx#{piece.display}\e[0m"
+      @rows[row][position] = "\e[46mx#{piece.display}\e[0m" #Mark that location on board
     else
-      @rows[row][position] = :X
+      @rows[row][position] = :X #Set to X if it's a blank
     end
   end
 
