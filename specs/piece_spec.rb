@@ -100,7 +100,19 @@ describe Piece do
     end
 
     context "when given correct # of params" do
-      
+      context "if input are incorrect" do
+        it "raises Error" do
+          expect{Piece.ping([], "B2", :down)}.to raise_error(ArgumentError, "Row must be 8x8")
+          expect{Piece.ping(empty_board, "D9", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+          expect{Piece.ping(empty_board, "poop", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+          expect{Piece.ping(empty_board, "A2", :top)}.to raise_error(StandardError, "top not recognized")
+          expect{Piece.ping(empty_board, "D5", :left, "caca")}.to raise_error("Distance must be Integer")
+        end
+      end
+
+      context "if input are valid" do
+        
+      end
     end
   end
 end
