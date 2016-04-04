@@ -188,6 +188,60 @@ describe Board do
       it "raises ArgumentError" do
         expect{@board.mark()}.to raise_error(ArgumentError)
       end
-    end    
+    end
+
+    context "when given input" do
+      context "if input is not valid" do
+        context "such as incorrect data types" do
+          it "raises ArgumentError" do
+            expect{@board.mark(23)}.to raise_error(ArgumentError, "Input must be String")
+            expect{@board.mark(["A2"])}.to raise_error(ArgumentError, "Input must be String")
+          end
+        end
+
+        context "such as invalid String" do
+          it "raises ArgumentError" do
+            expect{@board.mark("poop")}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+            expect{@board.mark("4C")}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+            expect{@board.mark("sure buddy")}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+            expect{@board.mark("C9")}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+          end
+        end
+      end
+      
+      context "if input is valid" do
+        context "if space is empty" do
+          it "marks spot with an X" do
+            expect(@board.rows[4][3]).to eql(" ")
+            @board.mark("D4")
+            expect(@board.rows[4][3]).to eql(:X)
+          end
+        end
+
+        context "if space is enemy player" do
+          it "sets the space to a String" do
+            expect(@board.rows[0][1]).not_to be_instance_of(String)
+            @board.mark("C8")
+            expect(@board.rows[0][1]).to be_instance_of(String)
+          end
+
+          context "when queen" do          
+            it "sets the space to Cyan-BG 'xBQ'" do
+              expect(@board.rows[0][3]).to be_instance_of(Queen)
+              @board.mark("D8")
+              expect(@board.rows[0][3]).to eql("\e[46mxBQ\e[0m")
+            end
+          end
+
+          context "when Pawn" do
+            it "sets the space to Cyan-BG 'xBP'" do
+              expect(@board.rows[1][2]).to be_instance_of(Pawn)
+              @board.mark("C7")
+              expect(@board.rows[1][2]).to eql("\e[46mxBP\e[0m")
+            end
+          end
+        end
+      end
+    end
   end
 end
