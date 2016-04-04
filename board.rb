@@ -23,6 +23,50 @@ class Board
     @rows = new_board #Run fresh Chess Set up
   end
 
+  def self.up(position)
+    "#{position[0]}#{position[1].to_i+1}"
+  end
+
+  def self.down(position)
+    "#{position[0]}#{position[1].to_i-1}"
+  end
+
+  def self.left(position)
+    "#{(position[0].ord - 1).chr}#{position[1]}"
+  end
+
+  def self.right(position)
+    "#{(position[0].ord + 1).chr}#{position[1]}"
+  end
+
+
+  def self.line(position, direction)
+    p_string = position.is_a? String
+    d_string = direction.is_a? Symbol
+    raise ArgumentError.new("Input must be String, and Symbol") unless p_string && d_string && position =~ /[A-H][1-8]/
+    
+    case direction
+    when :up
+      Board.up(position)
+    when :down
+      Board.down(position)
+    when :right
+      Board.right(position)
+    when :left
+      Board.left(position)
+    when :upright
+      Board.up(Board.right(position))
+    when :upleft
+      Board.up(Board.left(position))
+    when :downleft
+      Board.down(Board.left(position))
+    when :downright
+      Board.down(Board.right(position))
+    else
+      raise StandardError.new("#{direction} not recognized")
+    end
+  end
+
   def mark(position)
     row, position = Player.coord_string(position) #Run through the filter to get coordinates
     if @rows[row][position].is_a? Piece

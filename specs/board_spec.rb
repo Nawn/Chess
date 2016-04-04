@@ -255,7 +255,7 @@ describe Board do
     end
 
     context "when given input" do
-      context "if input is incorrect data type" do
+      context "if input is incorrect" do
         it "raises ArgumentError" do
           expect{Board.line("left", :up)}.to raise_error(ArgumentError, "Input must be String, and Symbol")
           expect{Board.line(45, :down)}.to raise_error(ArgumentError, "Input must be String, and Symbol")
@@ -307,7 +307,7 @@ describe Board do
           context "when input is :upright" do
             it "returns space up and to the right" do
               expect(Board.line("C3", :upright)).to eql("D4")
-              expect(Board.line("D5", :upright)).to eql("F6")
+              expect(Board.line("D5", :upright)).to eql("E6")
             end
           end
 
