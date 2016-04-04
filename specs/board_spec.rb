@@ -244,4 +244,38 @@ describe Board do
       end
     end
   end
+
+  describe ".line" do
+    context "when given inadequate # of input" do
+      it "raises an ArgumentError" do
+        expect{Board.line()}.to raise_error(ArgumentError)
+        expect{Board.line("A4")}.to raise_error(ArgumentError)
+        expect{Board.line(:left)}.to raise_error(ArgumentError)
+      end
+    end
+
+    context "when given input" do
+      context "if input is incorrect data type" do
+        it "raises ArgumentError" do
+          expect{Board.line("left", :up)}.to raise_error("Input must be String, and Symbol")
+          expect{Board.line(45, :down)}.to raise_error("Input must be String, and Symbol")
+        end
+      end
+
+      context "if input is correct data type" do
+        context "but input is not recognized" do
+          it "raises ArgumentError" do
+            expect{Board.line("A1", :around)}.to raise_error(StandardError, "around not recognized")
+            expect{Board.line("B4", :behind)}.to raise_error(StandardError, "behind not recognized")
+          end
+        end
+
+        context "and input is recognized" do
+          it "returns String" do
+            expect(Board.line("A1", :up)).to be_instance_of(String)
+          end
+        end
+      end
+    end
+  end
 end
