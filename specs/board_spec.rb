@@ -257,8 +257,9 @@ describe Board do
     context "when given input" do
       context "if input is incorrect data type" do
         it "raises ArgumentError" do
-          expect{Board.line("left", :up)}.to raise_error("Input must be String, and Symbol")
-          expect{Board.line(45, :down)}.to raise_error("Input must be String, and Symbol")
+          expect{Board.line("left", :up)}.to raise_error(ArgumentError, "Input must be String, and Symbol")
+          expect{Board.line(45, :down)}.to raise_error(ArgumentError, "Input must be String, and Symbol")
+          expect{Board.line("A4", [:poop])}.to raise_error(ArgumentError, "Input must be String, and Symbol")
         end
       end
 
@@ -273,6 +274,62 @@ describe Board do
         context "and input is recognized" do
           it "returns String" do
             expect(Board.line("A1", :up)).to be_instance_of(String)
+          end
+
+          context "when input is :up" do
+            it "it returns space above 1 square" do
+              expect(Board.line("A1", :up)).to eql("A2")
+              expect(Board.line("D4", :up)).to eql("D5")
+            end
+          end
+
+          context "when input is :down" do
+            it "returns space below 1 square" do
+              expect(Board.line("D5", :down)).to eql("D4")
+              expect(Board.line("G8", :down)).to eql("G7")
+            end
+          end
+
+          context "when input is :right" do
+            it "returns space to the right" do
+              expect(Board.line("G3", :right)).to eql("H3")
+              expect(Board.line("B7", :right)).to eql("C7")
+            end
+          end
+
+          context "when input is :left" do
+            it "returns space to the left" do
+              expect(Board.line("C3", :left)).to eql("B3")
+              expect(Board.line("D5", :left)).to eql("C5")
+            end
+          end
+
+          context "when input is :upright" do
+            it "returns space up and to the right" do
+              expect(Board.line("C3", :upright)).to eql("D4")
+              expect(Board.line("D5", :upright)).to eql("F6")
+            end
+          end
+
+          context "when input is :upleft" do
+            it "returns space up and to the left" do
+              expect(Board.line("C3", :upleft)).to eql("B4")
+              expect(Board.line("D5", :upleft)).to eql("C6")
+            end
+          end
+
+          context "when input is :downleft" do
+            it "returns space down and to the left" do
+              expect(Board.line("C3", :downleft)).to eql("B2")
+              expect(Board.line("D5", :downleft)).to eql("C4")
+            end
+          end
+
+          context "when input is :downright" do
+            it "returns space down and to the right" do
+              expect(Board.line("C5", :downright)).to eql("D4")
+              expect(Board.line("F8", :downright)).to eql("G7")
+            end
           end
         end
       end
