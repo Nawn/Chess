@@ -71,7 +71,7 @@ describe Piece do
 
   describe "#directions" do
     it "can be read" do
-      expect(Piece.directions).not_to raise_error
+      expect{Piece.directions}.not_to raise_error
     end
 
     it "returns an Array" do
