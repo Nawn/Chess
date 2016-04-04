@@ -68,4 +68,18 @@ describe Piece do
       expect(black_piece.team_color).to eql(:black)
     end
   end
+
+  describe "#directions" do
+    it "can be read" do
+      expect(Piece.directions).not_to raise_error
+    end
+
+    it "returns an Array" do
+      expect(Piece.directions).to be_instance_of(Array)
+    end
+
+    it "contains 4 direction Symbols" do
+      expect(Piece.directions).to eql([:up,:down,:left,:right])
+    end
+  end
 end
