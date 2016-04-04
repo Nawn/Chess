@@ -220,9 +220,9 @@ describe Board do
 
         context "if space is enemy player" do
           it "sets the space to a String" do
-            expect(@board.rows[0][1]).not_to be_instance_of(String)
+            expect(@board.rows[0][2]).not_to be_instance_of(String)
             @board.mark("C8")
-            expect(@board.rows[0][1]).to be_instance_of(String)
+            expect(@board.rows[0][2]).to be_instance_of(String)
           end
 
           context "when queen" do          

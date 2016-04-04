@@ -23,6 +23,16 @@ class Board
     @rows = new_board #Run fresh Chess Set up
   end
 
+  def mark(position)
+    row, position = Player.coord_string(position)
+    if @rows[row][position].is_a? Piece
+      piece = @rows[row][position]
+      @rows[row][position] = "\e[46mx#{piece.display}\e[0m"
+    else
+      @rows[row][position] = :X
+    end
+  end
+
   def flip(color_sym=nil)
     flip_check(color_sym)
 
