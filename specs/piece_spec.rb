@@ -86,32 +86,35 @@ describe Piece do
   describe ".ping" do
     before(:each) do
       empty_board = Array.new(8, Array.new(8, " "))
+      @piece = Piece.new(:white)
     end
 
     context "when given invalid # of params" do
       it "raises ArgumentError" do
-        expect{Piece.ping()}.to raise_error(ArgumentError)
-        expect{Piece.ping(empty_board)}.to raise_error(ArgumentError)
-        expect{Piece.ping(empty_board, "A1")}.to raise_error(ArgumentError)
-        expect{Piece.ping(empty_board, "A1", :left)}.not_to raise_error(ArgumentError)
-        expect{Piece.ping(empty_board, "A1", :left, 5)}.not_to raise_error(ArgumentError)
-        expect{Piece.ping(empty_board, "A1", :left, 0, "uhh")}.to raise_error(ArgumentError)
+        expect{@piece.ping()}.to raise_error(ArgumentError)
+        expect{@piece.ping(empty_board)}.to raise_error(ArgumentError)
+        expect{@piece.ping(empty_board, "A1")}.to raise_error(ArgumentError)
+        expect{@piece.ping(empty_board, "A1", :left)}.not_to raise_error(ArgumentError)
+        expect{@piece.ping(empty_board, "A1", :left, 5)}.not_to raise_error(ArgumentError)
+        expect{@piece.ping(empty_board, "A1", :left, 0, "uhh")}.to raise_error(ArgumentError)
       end
     end
 
     context "when given correct # of params" do
       context "if input are incorrect" do
         it "raises Error" do
-          expect{Piece.ping([], "B2", :down)}.to raise_error(ArgumentError, "Row must be 8x8")
-          expect{Piece.ping(empty_board, "D9", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
-          expect{Piece.ping(empty_board, "poop", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
-          expect{Piece.ping(empty_board, "A2", :top)}.to raise_error(StandardError, "top not recognized")
-          expect{Piece.ping(empty_board, "D5", :left, "caca")}.to raise_error("Distance must be Integer")
+          expect{@piece.ping([], "B2", :down)}.to raise_error(ArgumentError, "Row must be 8x8")
+          expect{@piece.ping(empty_board, "D9", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+          expect{@piece.ping(empty_board, "poop", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+          expect{@piece.ping(empty_board, "A2", :top)}.to raise_error(StandardError, "top not recognized")
+          expect{@piece.ping(empty_board, "D5", :left, "caca")}.to raise_error("Distance must be Integer")
         end
       end
 
       context "if input are valid" do
-        
+        it "does not raise error" do
+          expect{@piece.ping(empty_board, "C4", :left)}.not_to raise_error
+        end
       end
     end
   end
