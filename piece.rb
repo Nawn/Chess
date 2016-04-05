@@ -49,7 +49,7 @@ class Piece
     end
   end
 
-  def moves(input_rows, start_pos)
+  def moves(input_rows, start_pos, distance = 0)
     r = input_rows.is_a? Array
     s = start_pos.is_a? String
     raise ArgumentError.new("Input must be 8x8 Array, and Coordinate") unless r && s
@@ -58,7 +58,7 @@ class Piece
     potentials = []
 
     @directions.each do |symbol|
-      potentials = potentials + ping(print_rows, start_pos, symbol)
+      potentials = potentials + ping(print_rows, start_pos, symbol, distance)
     end
 
     puts Board.table(print_rows)
