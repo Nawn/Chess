@@ -97,9 +97,9 @@ class Board
     end
   end
 
-  def display
+  def display(input_rows=nil)
     #table() returns a Terminal::Table object, which is an ASCII board
-    puts table()
+    puts input_rows.nil? ? table() : table(input_rows)
   end
 
   private
