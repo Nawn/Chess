@@ -20,9 +20,20 @@ class Piece
     raise ArgumentError.new("Row must be 8x8") unless row_size
     raise ArgumentError.new("Distance must be Integer") unless counter.is_a? Integer
 
-    current_row, current_position = Player.coord_string(start)
+    begin
+      current_row, current_position = Player.coord_string(start)
+    rescue ArgumentError => e
+      return []
+    end
+
     next_space = Board.line(start, direction)
-    []
+    current_piece = edit_array[current_row][current_position]
+    if current_piece.is_a? Piece
+      return [] if current_piece.team_color == @team_color
+      return [start] if current_piece.team_color != @team_color
+    else
+      return ([start] + ping(edit_array, next_space, direction, counter))  
+    end
   end
 end
 

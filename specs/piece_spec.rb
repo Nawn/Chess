@@ -127,21 +127,21 @@ describe Piece do
 
         context "if given left" do
           it "returns Array of Coordinates to the left" do
-            expect(@piece.ping(@empty_board.clone, "D4", :left)).to eql(%w(C4 B4 A4))
+            expect(@piece.ping(@empty_board.clone, "D4", :left)).to eql(%w(D4 C4 B4 A4))
           end
         end
 
         context "if given right" do
           it "returns Array of Coordinates to the right" do
-            expect(@piece.ping(@empty_board.clone, "D4", :right)).to eql(%w(E4 F4 G4 H4))
+            expect(@piece.ping(@empty_board.clone, "D4", :right)).to eql(%w(D4 E4 F4 G4 H4))
           end
         end
 
         context "if given others" do
           it "returns appropriate Array of Coordinates" do
-            expect(@piece.ping(@empty_board.clone, "D4", :up)).to eql(%w(D5 D6 D7 D8))
-            expect(@piece.ping(@empty_board.clone, "D4", :down)).to eql(%w(D3 D2 D1))
-            expect(@piece.ping(@empty_board.clone, "D4", :upright)).to eql(%w(E5 F6 G7 H8))
+            expect(@piece.ping(@empty_board.clone, "D4", :up)).to eql(%w(D4 D5 D6 D7 D8))
+            expect(@piece.ping(@empty_board.clone, "D4", :down)).to eql(%w(D4 D3 D2 D1))
+            expect(@piece.ping(@empty_board.clone, "D4", :upright)).to eql(%w(D4 E5 F6 G7 H8))
           end
         end
 
@@ -157,27 +157,27 @@ describe Piece do
 
           context "if the piece is an Ally" do
             it "terminates early, and returns Array" do
-              expect(@piece.ping(@pop_board, "D4", :up)).to eql(%w(D5 D6 D7))
-              expect(@piece.ping(@pop_board, "D4", :downright)).to eql(%w(E3))
+              expect(@piece.ping(@pop_board, "D4", :up)).to eql(%w(D4 D5 D6 D7))
+              expect(@piece.ping(@pop_board, "D4", :downright)).to eql(%w(D4 E3))
             end
           end
 
           context "if the piece is an Enemy" do
             it "terminates early, and returns Array including enemy Piece coord" do
-              expect(@piece.ping(@pop_board, "D4", :upleft)).to eql(%w(C5 B6))
-              expect(@piece.ping(@pop_board, "D4", :down)).to eql(%w(D3 D2))
+              expect(@piece.ping(@pop_board, "D4", :upleft)).to eql(%w(D4 C5 B6))
+              expect(@piece.ping(@pop_board, "D4", :down)).to eql(%w(D4 D3 D2))
             end
           end
         end
 
         context "when given distance param" do
           it "only pings that far" do
-            expect(@piece.ping(@empty_board, "D4", :upright, 3)).to eql(%w(E5 F6 G7))
-            expect(@piece.ping(@empty_board, "D4", :downleft, 2)).to eql(%w(C3 B2))
+            expect(@piece.ping(@empty_board, "D4", :upright, 3)).to eql(%w(D4 E5 F6 G7))
+            expect(@piece.ping(@empty_board, "D4", :downleft, 2)).to eql(%w(D4 C3 B2))
           end
 
           it "will terminate early if nothing left to check" do
-            expect(@piece.ping(@empty_board, "E7", :upleft, 3)).to eql(%w(D8))
+            expect(@piece.ping(@empty_board, "E7", :upleft, 3)).to eql(%w(E7 D8))
           end
         end
       end
