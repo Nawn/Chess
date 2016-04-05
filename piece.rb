@@ -30,9 +30,14 @@ class Piece
     current_piece = edit_array[current_row][current_position]
 
     if current_piece.is_a? Piece
-      return [] if current_piece.team_color == @team_color
-      return [start] if current_piece.team_color != @team_color
+      if current_piece.team_color == @team_color
+        return [] 
+      else
+        edit_array[current_row][current_position] = "\e[46m#{current_piece.display}\e[0m"
+        return [start]
+      end
     else
+      edit_array[current_row][current_position] = :X
       return[start] if counter == 0
       return ([start] + ping(edit_array, next_space, direction, counter)) if counter == -1
       return ([start] + ping(edit_array, next_space, direction, counter-1))
