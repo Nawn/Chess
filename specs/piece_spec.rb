@@ -147,26 +147,37 @@ describe Piece do
 
         context "when it runs into another piece" do
           before(:each) do
-            @pop_array = @empty_board.clone
+            @pop_board = @empty_board.clone
             to_add = [["D8", :white], ["B6", :black], ["D2", :black], ["F2", :white]]
             to_add.each do |array|
               row, pos = Player.coord_string(array[0])
-              @pop_array[row][pos] = Pawn.new(array[1])
+              @pop_board[row][pos] = Pawn.new(array[1])
             end
           end
 
           context "if the piece is an Ally" do
             it "terminates early, and returns Array" do
-              expect(@piece.ping(@pop_array, "D4", :up)).to eql(%w(D5 D6 D7))
-              expect(@piece.ping(@pop_array, "D4", :downright)).to eql(%w(E3))
+              expect(@piece.ping(@pop_board, "D4", :up)).to eql(%w(D5 D6 D7))
+              expect(@piece.ping(@pop_board, "D4", :downright)).to eql(%w(E3))
             end
           end
 
           context "if the piece is an Enemy" do
             it "terminates early, and returns Array including enemy Piece coord" do
-              expect(@piece.ping(@pop_array, "D4", :upleft)).to eql(%w(C5 B6))
-              expect(@piece.ping(@pop_array, "D4", :down)).to eql(%w(D3 D2))
+              expect(@piece.ping(@pop_board, "D4", :upleft)).to eql(%w(C5 B6))
+              expect(@piece.ping(@pop_board, "D4", :down)).to eql(%w(D3 D2))
             end
+          end
+        end
+
+        context "when given distance param" do
+          it "only pings that far" do
+            expect(@piece.ping(@empty_board, "D4", :upright, 3)).to eql(%w(E5 F6 G7))
+            expect(@piece.ping(@empty_board, "D4", :downleft, 2)).to eql(%w(C3 B2))
+          end
+
+          it "will terminate early if nothing left to check" do
+            expect(@piece.ping(@empty_board, "E7", :upleft, 3)).to eql(%w(D8))
           end
         end
       end
