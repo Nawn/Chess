@@ -182,3 +182,39 @@ describe Piece do
     end
   end
 end
+
+describe Rook do
+  before(:each) do
+    @rook = Rook.new(:white)
+  end
+
+  it "is a Piece" do
+    expect(Rook).to be < Piece 
+  end
+
+  it "is a kind of Piece" do
+    expect(@rook).to be_kind_of(Piece)
+  end
+
+  describe "#moves" do
+    before(:each) do
+      board = Board.new
+      empty_row = Array.new(8, " ")
+      empty_board = []
+      8.times do |number|
+        empty_board[number] = empty_row.clone
+      end
+
+      @empty_board = empty_board.clone
+    end
+
+    context "when given incorrect # of params" do
+      it "raises ArgumentError" do
+        expect{@rook.moves()}.to raise_error(ArgumentError)
+        expect{@rook.moves(@empty_board)}.to raise_error(ArgumentError)
+        expect{@rook.moves(@empty_board, "D4")}.not_to raise_error
+        expect{@rook.moves(@empty_board, "D4", 5)}.to raise_error(ArgumentError)
+      end
+    end
+  end
+end
