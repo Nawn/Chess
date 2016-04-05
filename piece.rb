@@ -1,5 +1,6 @@
 class Piece
   attr_reader :display, :team_color
+  
   def self.directions
     [:up, :down, :left, :right]
   end

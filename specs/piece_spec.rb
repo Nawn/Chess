@@ -196,6 +196,20 @@ describe Rook do
     expect(@rook).to be_kind_of(Piece)
   end
 
+  describe "directions" do
+    it "returns an Array" do
+      expect(@rook.directions).to be_kind_of(Array)
+    end
+
+    it "contains only symbols" do
+      expect(@rook.directions.all? {|direction| direction.is_a? Symbol})
+    end
+
+    it "can go up, down, left and right" do
+      expect(@rook.directions).to eql([:up, :down, :left, :right])
+    end
+  end
+
   describe "#moves" do
     before(:each) do
       board = Board.new
@@ -214,6 +228,33 @@ describe Rook do
         expect{@rook.moves(@empty_board)}.to raise_error(ArgumentError)
         expect{@rook.moves(@empty_board, "D4")}.not_to raise_error
         expect{@rook.moves(@empty_board, "D4", 5)}.to raise_error(ArgumentError)
+      end
+    end
+
+    context "when given correct # of params" do
+      context "when input is incorrect" do
+        it "raises error" do
+          expect{@rook.moves(5, 20)}.to raise_error(ArgumentError)
+          expect{@rook.moves([], 20)}.to raise_error(ArgumentError)
+          expect{@rook.moves(@empty_board, 20)}.to raise_error(ArgumentError)
+          expect{@rook.moves(5, "D4")}.to raise_error(ArgumentError)
+        end
+      end
+
+      context "when input is correct" do
+        it "does not raise error" do
+          expect{@rook.moves(@empty_board, "D4")}.not_to raise_error
+        end
+
+        it "returns all potential moves" do
+          expect(@rook.moves(@empty_board, "D4")).to eql(%w(D5 D6 D7 D8 D3 D2 D1 C4 B4 A4 E4 F4 G4 H4))
+        end
+
+        context "with other pieces on board" do
+          before(:each) do
+            @pop_board = @empty_board.clone
+          end
+        end
       end
     end
   end
