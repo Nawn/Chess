@@ -99,8 +99,8 @@ describe Piece do
         expect{@piece.ping()}.to raise_error(ArgumentError)
         expect{@piece.ping(@empty_board.clone)}.to raise_error(ArgumentError)
         expect{@piece.ping(@empty_board.clone, "A1")}.to raise_error(ArgumentError)
-        expect{@piece.ping(@empty_board.clone, "A1", :left)}.not_to raise_error(ArgumentError)
-        expect{@piece.ping(@empty_board.clone, "A1", :left, 5)}.not_to raise_error(ArgumentError)
+        expect{@piece.ping(@empty_board.clone, "A1", :left)}.not_to raise_error
+        expect{@piece.ping(@empty_board.clone, "A1", :left, 5)}.not_to raise_error
         expect{@piece.ping(@empty_board.clone, "A1", :left, 0, "uhh")}.to raise_error(ArgumentError)
       end
     end
@@ -112,7 +112,7 @@ describe Piece do
           expect{@piece.ping(@empty_board.clone, "D9", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
           expect{@piece.ping(@empty_board.clone, "poop", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
           expect{@piece.ping(@empty_board.clone, "A2", :top)}.to raise_error(StandardError, "top not recognized")
-          expect{@piece.ping(@empty_board.clone, "D5", :left, "caca")}.to raise_error("Distance must be Integer")
+          expect{@piece.ping(@empty_board.clone, "D5", :left, "caca")}.to raise_error(ArgumentError, "Distance must be Integer")
         end
       end
 
