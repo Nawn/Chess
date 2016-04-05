@@ -13,6 +13,12 @@ class Piece
     #and turn it into a Symbol
     @display = "#{@team_color.to_s[0].upcase}#{self.class.to_s[0].upcase}".to_sym 
   end
+
+  def ping(edit_array, start, direction, counter=0)
+    raise ArgumentError.new("Rows must be String") unless edit_array.is_a? Array
+    row_size = edit_array.size == 8
+    raise ArgumentError.new("Row must be 8x8") unless row_size
+  end
 end
 
 class Pawn < Piece; end

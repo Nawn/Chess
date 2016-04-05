@@ -87,7 +87,7 @@ describe Piece do
     before(:each) do
       empty_row = Array.new(8, " ")
       final_rows = []
-      7.times do |index|
+      8.times do |index|
         final_rows[index] = empty_row.clone
       end
       @empty_board = final_rows
@@ -97,11 +97,11 @@ describe Piece do
     context "when given invalid # of params" do
       it "raises ArgumentError" do
         expect{@piece.ping()}.to raise_error(ArgumentError)
-        expect{@piece.ping(@empty_board)}.to raise_error(ArgumentError)
-        expect{@piece.ping(@empty_board, "A1")}.to raise_error(ArgumentError)
-        expect{@piece.ping(@empty_board, "A1", :left)}.not_to raise_error(ArgumentError)
-        expect{@piece.ping(@empty_board, "A1", :left, 5)}.not_to raise_error(ArgumentError)
-        expect{@piece.ping(@empty_board, "A1", :left, 0, "uhh")}.to raise_error(ArgumentError)
+        expect{@piece.ping(@empty_board.clone)}.to raise_error(ArgumentError)
+        expect{@piece.ping(@empty_board.clone, "A1")}.to raise_error(ArgumentError)
+        expect{@piece.ping(@empty_board.clone, "A1", :left)}.not_to raise_error(ArgumentError)
+        expect{@piece.ping(@empty_board.clone, "A1", :left, 5)}.not_to raise_error(ArgumentError)
+        expect{@piece.ping(@empty_board.clone, "A1", :left, 0, "uhh")}.to raise_error(ArgumentError)
       end
     end
 
@@ -109,39 +109,39 @@ describe Piece do
       context "if input are incorrect" do
         it "raises Error" do
           expect{@piece.ping([], "B2", :down)}.to raise_error(ArgumentError, "Row must be 8x8")
-          expect{@piece.ping(@empty_board, "D9", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
-          expect{@piece.ping(@empty_board, "poop", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
-          expect{@piece.ping(@empty_board, "A2", :top)}.to raise_error(StandardError, "top not recognized")
-          expect{@piece.ping(@empty_board, "D5", :left, "caca")}.to raise_error("Distance must be Integer")
+          expect{@piece.ping(@empty_board.clone, "D9", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+          expect{@piece.ping(@empty_board.clone, "poop", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
+          expect{@piece.ping(@empty_board.clone, "A2", :top)}.to raise_error(StandardError, "top not recognized")
+          expect{@piece.ping(@empty_board.clone, "D5", :left, "caca")}.to raise_error("Distance must be Integer")
         end
       end
 
       context "if input are valid" do
         it "does not raise error" do
-          expect{@piece.ping(@empty_board, "C4", :left)}.not_to raise_error
+          expect{@piece.ping(@empty_board.clone, "C4", :left)}.not_to raise_error
         end
 
         it "returns an Array" do
-          expect(@piece.ping(@empty_board, "C4", :left)).to be_instance_of(Array)
+          expect(@piece.ping(@empty_board.clone, "C4", :left)).to be_instance_of(Array)
         end
 
         context "if given left" do
           it "returns Array of Coordinates to the left" do
-            expect(@piece.ping(@empty_board, "D4", :left)).to eql(%w(C4 B4 A4))
+            expect(@piece.ping(@empty_board.clone, "D4", :left)).to eql(%w(C4 B4 A4))
           end
         end
 
         context "if given right" do
           it "returns Array of Coordinates to the right" do
-            expect(@piece.ping(@empty_board, "D4", :right)).to eql(%w(E4 F4 G4 H4))
+            expect(@piece.ping(@empty_board.clone, "D4", :right)).to eql(%w(E4 F4 G4 H4))
           end
         end
 
         context "if given others" do
           it "returns appropriate Array of Coordinates" do
-            expect(@piece.ping(@empty_board, "D4", :up)).to eql(%w(D5 D6 D7 D8))
-            expect(@piece.ping(@empty_board, "D4", :down)).to eql(%w(D3 D2 D1))
-            expect(@piece.ping(@empty_board, "D4", :upright)).to eql(%w(E5 F6 G7 H8))
+            expect(@piece.ping(@empty_board.clone, "D4", :up)).to eql(%w(D5 D6 D7 D8))
+            expect(@piece.ping(@empty_board.clone, "D4", :down)).to eql(%w(D3 D2 D1))
+            expect(@piece.ping(@empty_board.clone, "D4", :upright)).to eql(%w(E5 F6 G7 H8))
           end
         end
 
