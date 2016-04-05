@@ -109,8 +109,6 @@ describe Piece do
       context "if input are incorrect" do
         it "raises Error" do
           expect{@piece.ping([], "B2", :down)}.to raise_error(ArgumentError, "Row must be 8x8")
-          expect{@piece.ping(@empty_board.clone, "D9", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
-          expect{@piece.ping(@empty_board.clone, "poop", :left)}.to raise_error(ArgumentError, "Input incorrect. Example: C4, B2, A3, etc.")
           expect{@piece.ping(@empty_board.clone, "A2", :top)}.to raise_error(StandardError, "top not recognized")
           expect{@piece.ping(@empty_board.clone, "D5", :left, "caca")}.to raise_error(ArgumentError, "Distance must be Integer")
         end

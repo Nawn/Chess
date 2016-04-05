@@ -14,7 +14,7 @@ class Piece
     @display = "#{@team_color.to_s[0].upcase}#{self.class.to_s[0].upcase}".to_sym 
   end
 
-  def ping(edit_array, start, direction, counter=0)
+  def ping(edit_array, start, direction, counter=-1)
     raise ArgumentError.new("Rows must be String") unless edit_array.is_a? Array
     row_size = edit_array.size == 8
     raise ArgumentError.new("Row must be 8x8") unless row_size
@@ -28,11 +28,14 @@ class Piece
 
     next_space = Board.line(start, direction)
     current_piece = edit_array[current_row][current_position]
+
     if current_piece.is_a? Piece
       return [] if current_piece.team_color == @team_color
       return [start] if current_piece.team_color != @team_color
     else
-      return ([start] + ping(edit_array, next_space, direction, counter))  
+      return[start] if counter == 0
+      return ([start] + ping(edit_array, next_space, direction, counter)) if counter == -1
+      return ([start] + ping(edit_array, next_space, direction, counter-1))
     end
   end
 end
