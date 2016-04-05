@@ -1,8 +1,12 @@
 class Piece
-  attr_reader :display, :team_color
+  attr_reader :display, :team_color, :directions
   
   def self.directions
     [:up, :down, :left, :right]
+  end
+
+  def self.diagonals
+    [:upleft, :upright, :downleft, :downright]
   end
   
   def initialize(color_sym = nil)
@@ -57,7 +61,28 @@ class Knight < Piece
   end
 end
 
-class Rook < Piece; end
+class Rook < Piece
+  def initialize(color_sym=nil)
+    super(color_sym)
+    @directions = Piece.directions.clone
+  end
+
+  def moves(input_rows, start_pos)
+    r = input_rows.is_a? Array
+    s = start_pos.is_a? String
+    raise ArgumentError.new("Input must be 8x8 Array, and Coordinate") unless r && s
+    
+    print_rows = input_rows.clone
+    potentials = []
+
+    @directions.each do |symbol|
+      potentials = potentials + ping(print_rows, start_pos, symbol)
+    end
+
+    puts Board.table([print_rows])
+    potentials
+  end
+end
 
 class Bishop < Piece; end
 

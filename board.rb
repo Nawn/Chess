@@ -23,6 +23,19 @@ class Board
     @rows = new_board #Run fresh Chess Set up
   end
 
+  #Returns a Terminal::Table Object
+  def self.table(input_rows)
+    rows = []
+    temp_rows = input_rows.map { |e| e.map {|i| i.is_a?(Piece) ? i.display : i  } }.clone
+    8.times do |number|
+      rows << [8-number] + temp_rows[number]
+      rows << :separator
+    end
+    rows << ([" "] + Array("A".."H"))
+
+    Terminal::Table.new :rows => rows    
+  end
+
   def self.up(position)
     "#{position[0]}#{position[1].to_i+1}"
   end
@@ -99,7 +112,7 @@ class Board
 
   def display(input_rows=nil)
     #table() returns a Terminal::Table object, which is an ASCII board
-    puts input_rows.nil? ? table() : table(input_rows)
+    puts input_rows.nil? ? Board.table(@rows) : Board.table(input_rows)
   end
 
   private
@@ -163,14 +176,5 @@ class Board
 
   #Take the data in the rows, and create an ASCII board of it.
   def table(input_row = @rows)
-    rows = []
-    temp_rows = input_row.map { |e| e.map {|i| i.is_a?(Piece) ? i.display : i  } }
-    8.times do |number|
-      rows << [8-number] + temp_rows[number]
-      rows << :separator
-    end
-    rows << ([" "] + Array("A".."H"))
-
-    Terminal::Table.new :rows => rows
   end
 end
