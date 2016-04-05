@@ -83,7 +83,7 @@ describe Piece do
     end
   end
 
-  describe ".ping" do
+  describe "#ping" do
     before(:each) do
       empty_row = Array.new(8, " ")
       final_rows = []
