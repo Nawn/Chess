@@ -54,7 +54,7 @@ class Piece
     s = start_pos.is_a? String
     raise ArgumentError.new("Input must be 8x8 Array, and Coordinate") unless r && s
     
-    print_rows = input_rows.clone
+    print_rows = input_rows.map(&:dup)
     potentials = []
 
     @directions.each do |symbol|
