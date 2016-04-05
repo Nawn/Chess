@@ -43,10 +43,26 @@ class Piece
       end
     else
       edit_array[current_row][current_position] = :X #If it's not a Piece, rather an empty space
-      return[next_space] if counter == 1 #If we set a limit, and we're at 1, that means this is the last empty spot
+      return [next_space] if counter == 1 #If we set a limit, and we're at 1, that means this is the last empty spot
       return ([next_space] + ping(edit_array, next_space, direction, counter)) if counter.zero? #If it's 0, then that means we didn't set a counter
       return ([next_space] + ping(edit_array, next_space, direction, counter-1)) #If we did set a counter, then return the next with a -1 to counter.
     end
+  end
+
+  def moves(input_rows, start_pos)
+    r = input_rows.is_a? Array
+    s = start_pos.is_a? String
+    raise ArgumentError.new("Input must be 8x8 Array, and Coordinate") unless r && s
+    
+    print_rows = input_rows.clone
+    potentials = []
+
+    @directions.each do |symbol|
+      potentials = potentials + ping(print_rows, start_pos, symbol)
+    end
+
+    puts Board.table(print_rows)
+    potentials
   end
 end
 
@@ -65,22 +81,6 @@ class Rook < Piece
   def initialize(color_sym=nil)
     super(color_sym)
     @directions = Piece.directions.clone
-  end
-
-  def moves(input_rows, start_pos)
-    r = input_rows.is_a? Array
-    s = start_pos.is_a? String
-    raise ArgumentError.new("Input must be 8x8 Array, and Coordinate") unless r && s
-    
-    print_rows = input_rows.clone
-    potentials = []
-
-    @directions.each do |symbol|
-      potentials = potentials + ping(print_rows, start_pos, symbol)
-    end
-
-    puts Board.table([print_rows])
-    potentials
   end
 end
 

@@ -26,7 +26,7 @@ class Board
   #Returns a Terminal::Table Object
   def self.table(input_rows)
     rows = []
-    temp_rows = input_rows.map { |e| e.map {|i| i.is_a?(Piece) ? i.display : i  } }.clone
+    temp_rows = input_rows.map { |e| e.map {|i| i.is_a?(Piece) ? i.display : i  } }
     8.times do |number|
       rows << [8-number] + temp_rows[number]
       rows << :separator
