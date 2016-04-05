@@ -84,8 +84,18 @@ class Rook < Piece
   end
 end
 
-class Bishop < Piece; end
+class Bishop < Piece
+  def initialize(color_sym=nil)
+    super(color_sym)
+    @directions = Piece.diagonals.clone
+  end
+end
 
 class King < Piece; end
 
-class Queen < Piece; end
+class Queen < Piece
+  def initialize(color_sym=nil)
+    super(color_sym)
+    @directions = Piece.directions.clone + Piece.diagonals.clone
+  end
+end
