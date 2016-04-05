@@ -18,8 +18,11 @@ class Piece
     raise ArgumentError.new("Rows must be String") unless edit_array.is_a? Array
     row_size = edit_array.size == 8
     raise ArgumentError.new("Row must be 8x8") unless row_size
+    raise ArgumentError.new("Distance must be Integer") unless counter.is_a? Integer
 
     current_row, current_position = Player.coord_string(start)
+    next_space = Board.line(start, direction)
+    []
   end
 end
 
