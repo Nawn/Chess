@@ -196,7 +196,7 @@ describe Rook do
     expect(@rook).to be_kind_of(Piece)
   end
 
-  describe "directions" do
+  describe "#directions" do
     it "returns an Array" do
       expect(@rook.directions).to be_kind_of(Array)
     end
@@ -253,6 +253,15 @@ describe Rook do
         context "with other pieces on board" do
           before(:each) do
             @pop_board = @empty_board.clone
+            to_add = [["D4", :white], ["D7", :black], ["B4", :white]]
+            to_add.each do |array|
+              cur_row, cur_pos = Player.coord_string(array[0])
+              @pop_board[cur_row][cur_pos] = Rook.new(array[1])
+            end
+          end
+
+          it "returns potential moves" do
+            expect(@rook.moves(@pop_board, "D4")).to eql(%w(D5 D6 D7 D3 D2 D1 C4 E4 F4 G4 H4))
           end
         end
       end
