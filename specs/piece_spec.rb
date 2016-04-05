@@ -85,7 +85,12 @@ describe Piece do
 
   describe ".ping" do
     before(:each) do
-      @empty_board = Array.new(8, Array.new(8, " "))
+      empty_row = Array.new(8, " ")
+      final_rows = []
+      7.times do |index|
+        final_rows[index] = empty_row.clone
+      end
+      @empty_board = final_rows
       @piece = Piece.new(:white)
     end
 
@@ -142,15 +147,26 @@ describe Piece do
 
         context "when it runs into another piece" do
           before(:each) do
-            @empty_board = Array.new(8, Array.new(8, " "))
-            @piece = Piece.new(:white)
+            @pop_array = @empty_board.clone
+            to_add = [["D8", :white], ["B6", :black], ["D2", :black], ["F2", :white]]
+            to_add.each do |array|
+              row, pos = Player.coord_string(array[0])
+              @pop_array[row][pos] = Pawn.new(array[1])
+            end
           end
-          context "if the piece is an Ally" do
 
+          context "if the piece is an Ally" do
+            it "terminates early, and returns Array" do
+              expect(@piece.ping(@pop_array, "D4", :up)).to eql(%w(D5 D6 D7))
+              expect(@piece.ping(@pop_array, "D4", :downright)).to eql(%w(E3))
+            end
           end
 
           context "if the piece is an Enemy" do
-
+            it "terminates early, and returns Array including enemy Piece coord" do
+              expect(@piece.ping(@pop_array, "D4", :upleft)).to eql(%w(C5 B6))
+              expect(@piece.ping(@pop_array, "D4", :down)).to eql(%w(D3 D2))
+            end
           end
         end
       end
