@@ -172,7 +172,77 @@ class King < Piece
 
   private
   def threatened(input_rows, space)
-    knight_check(input_rows, space)
+    knight_check(input_rows, space) || rook_check(input_rows, space) || bishop_check(input_rows, space) || pawn_check(input_rows, space) || king_check(input_rows, space)
+  end
+
+  def king_check(input_rows, space)
+    dir = Piece.directions + Piece.diagonals
+    dir.each do |symbol|
+      row, pos = Player.coord_string(Board.line(space, symbol))
+      current = input_rows[row][pos]
+
+      if current.is_a? King
+        return true if current.team_color != @team_color
+      end
+    end
+    false
+  end
+
+  def pawn_check(input_rows, space)
+    to_check = [Board.line(space, :upright), Board.line(space, :upleft)]
+    to_check.each do |coord|
+      current = input_rows[Player.coord_string(coord)[0]][Player.coord_string(coord)[1]]
+      if current.is_a? Pawn
+        return true if current.team_color != @team_color
+      end
+    end
+    false
+  end
+
+  def bishop_check(input_rows, space)
+    potentials = []
+    throwaway = input_rows.map(&:dup)
+
+    Piece.diagonals.each do |symbol|
+      #def ping(edit_array, start, direction, counter=0)
+      potentials = potentials + ping(throwaway, space, symbol)
+    end
+
+    pieces = potentials.select do |coord|
+      current = input_rows[Player.coord_string(coord)[0]][Player.coord_string(coord)[1]]
+      current.is_a? Piece
+    end
+
+    pieces.any? do |piece|
+      current = input_rows[Player.coord_string(piece)[0]][Player.coord_string(piece)[1]]
+      r = current.is_a? Bishop
+      q = current.is_a? Queen
+
+      r || q
+    end
+  end
+
+  def rook_check(input_rows, space)
+    potentials = []
+    throwaway = input_rows.map(&:dup)
+
+    Piece.directions.each do |symbol|
+      #def ping(edit_array, start, direction, counter=0)
+      potentials = potentials + ping(throwaway, space, symbol)
+    end
+
+    pieces = potentials.select do |coord|
+      current = input_rows[Player.coord_string(coord)[0]][Player.coord_string(coord)[1]]
+      current.is_a? Piece
+    end
+
+    pieces.any? do |piece|
+      current = input_rows[Player.coord_string(piece)[0]][Player.coord_string(piece)[1]]
+      r = current.is_a? Rook
+      q = current.is_a? Queen
+
+      r || q
+    end
   end
 
   def knight_check(input_rows, space)
