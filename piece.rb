@@ -129,7 +129,7 @@ class Knight < Piece
     super(color_sym)
     #Knights and Kings have the same Class initial
     #Knights will have an n after their K, to make them distinct
-    @display = (@display.to_s + "n").to_sym 
+    @display = (@display.to_s + "n").to_sym
   end
 end
 
@@ -147,7 +147,13 @@ class Bishop < Piece
   end
 end
 
-class King < Piece; end
+class King < Piece
+  def initialize(color_sym=nil)
+    super(color_sym)
+    @directions = Piece.directions.clone + Piece.diagonals.clone
+    @distance = 1
+  end
+end
 
 class Queen < Piece
   def initialize(color_sym=nil)
