@@ -21,6 +21,10 @@ class Piece
     @moved = false
   end
 
+  def move
+    @moved = true
+  end
+
   def ping(edit_array, start, direction, counter=0)
     raise ArgumentError.new("Rows must be String") unless edit_array.is_a? Array
     row_size = edit_array.size == 8 && edit_array.all? {|row| row.size == 8}
