@@ -228,7 +228,8 @@ describe Rook do
         expect{@rook.moves(@empty_board)}.to raise_error(ArgumentError)
         expect{@rook.moves(@empty_board, "D4")}.not_to raise_error
         expect{@rook.moves(@empty_board, "D4", 5)}.not_to raise_error
-        expect{@rook.moves(@empty_board, "D4", 5, "poopy")}.to raise_error(ArgumentError)
+        expect{@rook.moves(@empty_board, "D4", 5, true)}.not_to raise_error
+        expect{@rook.moves(@empty_board, "D4", 5, false, "poop")}.to raise_error(ArgumentError)
       end
     end
 

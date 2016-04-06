@@ -1,5 +1,5 @@
 class Piece
-  attr_reader :display, :team_color, :directions
+  attr_reader :display, :team_color, :directions, :moved
   
   def self.directions
     [:up, :down, :left, :right]
@@ -16,10 +16,11 @@ class Piece
     
     #Create a display made of the piece's COLOR, and Piece type(Class)
     #and turn it into a Symbol
-    @display = "#{@team_color.to_s[0].upcase}#{self.class.to_s[0].upcase}".to_sym 
+    @display = "#{@team_color.to_s[0].upcase}#{self.class.to_s[0].upcase}".to_sym
+    @distance = 0
   end
 
-  def ping(edit_array, start, direction, counter=-1)
+  def ping(edit_array, start, direction, counter=0)
     raise ArgumentError.new("Rows must be String") unless edit_array.is_a? Array
     row_size = edit_array.size == 8 && edit_array.all? {|row| row.size == 8}
     raise ArgumentError.new("Row must be 8x8") unless row_size
@@ -49,7 +50,7 @@ class Piece
     end
   end
 
-  def moves(input_rows, start_pos, distance = 0)
+  def moves(input_rows, start_pos, distance = @distance, display = true)
     r = input_rows.is_a? Array
     s = start_pos.is_a? String
     raise ArgumentError.new("Input must be 8x8 Array, and Coordinate") unless r && s
@@ -61,12 +62,32 @@ class Piece
       potentials = potentials + ping(print_rows, start_pos, symbol, distance)
     end
 
-    puts Board.table(print_rows)
+    puts Board.table(print_rows) if display
     potentials
   end
 end
 
-class Pawn < Piece; end
+class Pawn < Piece
+  def initialize(color_sym=nil)
+    super(color_sym)
+    @distance = 1
+    @directions = [:up, :upleft, :upright]
+  end
+
+  def moves(input_rows, start_pos, distance = @distance)
+    r = input_rows.is_a? Array
+    s = start_pos.is_a? String
+    raise ArgumentError.new("Input must be 8x8 Array, and Coordinate") unless r && s
+
+    print_rows = input_rows.map(&:dup)
+    potentials = {}
+    @directions.each do |symbol|
+      potentials[symbol] = Board.line(start_pos, symbol) 
+    end
+
+    #So far I have a Hash of the direction, and the Position it'll be in. W00T!
+  end
+end
 
 class Knight < Piece
   def initialize(color_sym=nil)
