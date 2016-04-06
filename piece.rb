@@ -139,17 +139,17 @@ class Knight < Piece
     potential_moves = []
 
     @verticals.each do |symbol|
-      two_away = Board.line(Board.line(start_pos, symbol), symbol)
+      two_away = Board.line(Board.line(start_pos, symbol), symbol) #up, up/down, down
       @horizontals.each do |h_symbol| 
-        potential_moves = potential_moves + ping(temp_rows, two_away, h_symbol, 1)
+        potential_moves = potential_moves + ping(temp_rows, two_away, h_symbol, 1) #left, right
       end
     end
 
     @horizontals.each do |symbol|
-      two_away = Board.line(Board.line(start_pos, symbol), symbol)
+      two_away = Board.line(Board.line(start_pos, symbol), symbol) #left, left/ right, right
 
       @verticals.each do |v_symbol|
-        potential_moves = potential_moves + ping(temp_rows, two_away, v_symbol, 1)
+        potential_moves = potential_moves + ping(temp_rows, two_away, v_symbol, 1)#up,down
       end
     end
 
