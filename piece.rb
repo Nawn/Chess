@@ -54,12 +54,13 @@ class Piece
     r = input_rows.is_a? Array
     s = start_pos.is_a? String
     raise ArgumentError.new("Input must be 8x8 Array, and Coordinate") unless r && s
-    
-    print_rows = input_rows.map(&:dup)
-    potentials = []
+    #Error Handling
+
+    print_rows = input_rows.map(&:dup) #Create a copy of the Board to fuck with
+    potentials = [] #Declare empty array to hold all potentials
 
     @directions.each do |symbol|
-      potentials = potentials + ping(print_rows, start_pos, symbol, distance)
+      potentials = potentials + ping(print_rows, start_pos, symbol, distance) #For each direction you can go, 
     end
 
     puts Board.table(print_rows) if display
@@ -75,17 +76,33 @@ class Pawn < Piece
   end
 
   def moves(input_rows, start_pos, distance = @distance)
-    r = input_rows.is_a? Array
-    s = start_pos.is_a? String
-    raise ArgumentError.new("Input must be 8x8 Array, and Coordinate") unless r && s
+    potential_moves = super(input_rows, start_pos, distance, false)
 
-    print_rows = input_rows.map(&:dup)
-    potentials = {}
-    @directions.each do |symbol|
-      potentials[symbol] = Board.line(start_pos, symbol) 
+    temp_rows = input_rows.map(&:dup)
+
+    up = potential_moves.select {|elem| elem[0] == start_pos[0]}
+    diag = potential_moves - up
+
+    unless up.empty?
+      up.each do |pos|
+        Board.mark(temp_rows, pos)
+      end
     end
 
-    #So far I have a Hash of the direction, and the Position it'll be in. W00T!
+    diag.each do |pos|
+      cur_row, cur_pos = Player.coord_string(pos)
+      current_piece = temp_rows[cur_row][cur_pos]
+      if current_piece.is_a? Piece
+        if current_piece.team_color != @team_color
+          Board.mark(temp_rows, pos)
+        end
+      else
+        diag = diag - [pos]
+      end
+    end
+
+    puts Board.table(temp_rows)
+    up + diag
   end
 end
 

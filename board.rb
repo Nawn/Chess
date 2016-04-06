@@ -52,6 +52,15 @@ class Board
     "#{(position[0].ord + 1).chr}#{position[1]}"
   end
 
+  def self.mark(input_rows, position, object=:X)
+    row, position = Player.coord_string(position) #Run through the filter to get coordinates
+    if input_rows[row][position].is_a? Piece
+      piece = input_rows[row][position]
+      input_rows[row][position] = "\e[46mx#{piece.display}\e[0m" #Mark that location on board
+    else
+      input_rows[row][position] = object #Set to X if it's a blank
+    end
+  end
 
   def self.line(position, direction)
     p_string = position.is_a? String
@@ -81,13 +90,7 @@ class Board
   end
 
   def mark(position, object=:X)
-    row, position = Player.coord_string(position) #Run through the filter to get coordinates
-    if @rows[row][position].is_a? Piece
-      piece = @rows[row][position]
-      @rows[row][position] = "\e[46mx#{piece.display}\e[0m" #Mark that location on board
-    else
-      @rows[row][position] = object #Set to X if it's a blank
-    end
+    Board.mark(@rows, position, object)
   end
 
   def flip(color_sym=nil)
