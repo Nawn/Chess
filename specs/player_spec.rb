@@ -171,7 +171,16 @@ describe Player do
     end
 
     context "when given invalid inputs" do
-      
+      context "if input are not String" do
+        it "raises ArgumentError" do
+          expect{@player1.move(5, "A4")}.to raise_error(ArgumentError)
+          expect{@player1.move("A2", 5)}.to raise_error(ArgumentError)
+        end
+      end
+
+      context "if locations are invalid" do
+        
+      end
     end
   end
 end
