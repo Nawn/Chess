@@ -179,7 +179,14 @@ describe Player do
       end
 
       context "if locations are invalid" do
-        
+        context "if start is not our piece" do
+        end
+
+        context "if start is an empty space" do
+        end
+
+        context "if destination is our piece" do
+        end
       end
     end
   end
