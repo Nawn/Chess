@@ -148,4 +148,30 @@ describe Player do
       end
     end
   end
+
+  describe "#move" do
+    before(:each) do
+      @board = Board.new
+      @player1 = @board.players[0]
+      @player2 = @board.players[1]
+    end
+
+    it "accepts 2 coordinates" do
+      expect{@player1.move("A2", "A4")}.not_to raise_error
+    end
+
+    it "accepts 2 coordinates, and input_rows" do
+      expect{@player1.move("A2", "A4", @board.rows)}.not_to raise_error
+    end
+
+    it "does not take less than 2 or more than 3 Arguments" do
+      expect{@player1.move()}.to raise_error(ArgumentError)
+      expect{@player1.move("A2")}.to raise_error(ArgumentError)
+      expect{@player1.move("A2", "A4", @board.rows, 5)}.to raise_error(ArgumentError)
+    end
+
+    context "when given invalid inputs" do
+      
+    end
+  end
 end
