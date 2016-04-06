@@ -18,6 +18,7 @@ class Piece
     #and turn it into a Symbol
     @display = "#{@team_color.to_s[0].upcase}#{self.class.to_s[0].upcase}".to_sym
     @distance = 0
+    @moved = false
   end
 
   def ping(edit_array, start, direction, counter=0)
@@ -84,6 +85,21 @@ class Pawn < Piece
     diag = potential_moves - up
 
     unless up.empty?
+      up_row, up_pos = Player.coord_string(up.first)
+      up_piece = temp_rows[up_row][up_pos]
+      if up_piece.is_a? Piece
+        up = up - [up.first]
+      else
+        unless @moved
+          next_coord = Board.line(up.first, :up)
+          next_row, next_pos = Player.coord_string(next_coord)
+          next_space = temp_rows[next_row][next_pos]
+          if next_space == " "
+            up << next_coord
+          end
+        end
+      end
+
       up.each do |pos|
         Board.mark(temp_rows, pos)
       end
