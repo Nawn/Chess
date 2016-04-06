@@ -166,8 +166,21 @@ class King < Piece
     @distance = 1
   end
 
-  def test(input_rows, space)
-    puts threatened(input_rows, space)
+  def moves(input_rows, start_pos, distance = @distance)
+    moves = super(input_rows, start_pos, distance, false)
+    throwaway = input_rows.map(&:dup)
+    acceptable = []
+
+    moves.each do |coord|
+      acceptable = acceptable + [coord] unless threatened(input_rows, coord)
+    end
+    
+    acceptable.each do |coord|
+      Board.mark(throwaway, coord)
+    end
+
+    puts Board.table(throwaway)
+    acceptable
   end
 
   private
