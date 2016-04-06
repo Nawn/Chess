@@ -81,48 +81,46 @@ class Pawn < Piece
   end
 
   def moves(input_rows, start_pos, distance = @distance)
-    potential_moves = super(input_rows, start_pos, distance, false)
+    potential_moves = super(input_rows, start_pos, distance, false) #Get an array of Coordinates upleft - upright
 
-    temp_rows = input_rows.map(&:dup)
+    temp_rows = input_rows.map(&:dup) #Copy rows so we can fuck with em
 
-    up = potential_moves.select {|elem| elem[0] == start_pos[0]}
-    diag = potential_moves - up
+    up = potential_moves.select {|elem| elem[0] == start_pos[0]} #Filter out only directly up Coordinates
+    diag = potential_moves - up #Filter out diagonals
 
-    unless up.empty?
+    unless up.empty? 
       up_row, up_pos = Player.coord_string(up.first)
-      up_piece = temp_rows[up_row][up_pos]
-      if up_piece.is_a? Piece
-        up = up - [up.first]
-      else
-        unless @moved
-          next_coord = Board.line(up.first, :up)
-          next_row, next_pos = Player.coord_string(next_coord)
-          next_space = temp_rows[next_row][next_pos]
-          if next_space == " "
-            up << next_coord
+      up_piece = temp_rows[up_row][up_pos] #Figure out what the piece above is
+      if up_piece.is_a? Piece #If it's a piece(Because pawn's can't cap spaces ahead, only diag)
+        up = up - [up.first] #Remove it.
+      else #If it's not a piece(Ergo, free space above us)
+        unless @moved #Find out if we moved already
+          next_coord = Board.line(up.first, :up) #If we haven't moved, we get another jump, check the next space
+          next_space = temp_rows[Player.coord_string(next_coord)[0]][Player.coord_string(next_coord)[1]] #Get reference of that object
+          if next_space == " " #If it's free to move to
+            up << next_coord #Add it to the queue of places to jump
           end
         end
       end
 
       up.each do |pos|
-        Board.mark(temp_rows, pos)
+        Board.mark(temp_rows, pos) #Then mark all the places we can get to.
       end
     end
 
-    diag.each do |pos|
-      cur_row, cur_pos = Player.coord_string(pos)
-      current_piece = temp_rows[cur_row][cur_pos]
-      if current_piece.is_a? Piece
-        if current_piece.team_color != @team_color
-          Board.mark(temp_rows, pos)
+    diag.each do |pos| #As for the diagonals
+      current_piece = temp_rows[Player.coord_string(pos)[0]][Player.coord_string(pos)[1]]
+      if current_piece.is_a? Piece #If the diagonal space is a piece
+        if current_piece.team_color != @team_color #Check if it's an enemy
+          Board.mark(temp_rows, pos) #If so, mark em for Capping
         end
-      else
-        diag = diag - [pos]
+      else #If it's not a piece
+        diag = diag - [pos] #Remove it from the potential moves, we can't just jump diagonal willy-nilly
       end
     end
 
-    puts Board.table(temp_rows)
-    up + diag
+    puts Board.table(temp_rows) #Print out a display of potential moves
+    up + diag #Then return the array of potentials
   end
 end
 
