@@ -130,6 +130,31 @@ class Knight < Piece
     #Knights and Kings have the same Class initial
     #Knights will have an n after their K, to make them distinct
     @display = (@display.to_s + "n").to_sym
+    @verticals = Piece.directions[0..1]
+    @horizontals = Piece.directions[2..3]
+  end
+
+  def moves(input_rows, start_pos, distance = @distance)
+    temp_rows = input_rows.map(&:dup) #Copy rows so we can fuck with em
+    potential_moves = []
+
+    @verticals.each do |symbol|
+      two_away = Board.line(Board.line(start_pos, symbol), symbol)
+      @horizontals.each do |h_symbol| 
+        potential_moves = potential_moves + ping(temp_rows, two_away, h_symbol, 1)
+      end
+    end
+
+    @horizontals.each do |symbol|
+      two_away = Board.line(Board.line(start_pos, symbol), symbol)
+
+      @verticals.each do |v_symbol|
+        potential_moves = potential_moves + ping(temp_rows, two_away, v_symbol, 1)
+      end
+    end
+
+    puts Board.table(temp_rows)
+    potential_moves
   end
 end
 
