@@ -180,12 +180,29 @@ describe Player do
 
       context "if locations are invalid" do
         context "if start is not our piece" do
+          it "raises StandardError" do
+            expect{@player1.move("D7", "D5")}.to raise_error(StandardError, "Not your piece")
+            expect{@player1.move("E7", "E6")}.to raise_error(StandardError, "Not your piece")
+          end
         end
 
         context "if start is an empty space" do
+          it "raises StandardError" do
+            expect{@player1.move("D4", "D5")}.to raise_error(StandardError, "Space is empty")
+            expect{@player1.move("E3", "E4")}.to raise_error(StandardError, "Space is empty")
+          end
         end
 
-        context "if destination is our piece" do
+        context "if destination is not a potential move" do
+          before(:each) do
+            empty_row = Array.new(8, " ")
+            @empty_board = []
+            8.times do |num|
+              @empty_board[num] = empty_row.clone
+            end
+          end
+
+          
         end
       end
     end
