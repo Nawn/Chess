@@ -1,5 +1,17 @@
 require_relative "spec_helper.rb"
 
+def test_board
+  empty_row = Array.new(8, " ")
+  empty_board = []
+  8.times do |num|
+    empty_board << empty_row.clone
+  end
+  empty_board[4][3] = Rook.new(:white)
+  empty_board[4][1] = Pawn.new(:black)
+  empty_board[4][6] = Pawn.new(:white)
+  empty_board
+end
+
 describe Player do
   describe "#new" do
     context "when given no input" do
@@ -198,6 +210,23 @@ describe Player do
             expect{@player1.move("D2", "D3")}.not_to raise_error
             expect{@player1.move("E2", "E4")}.not_to raise_error
             expect{@player1.move("G1", "F3")}.not_to raise_error
+            expect{@player1.move("F1", "H3")}.to raise_error(StandardError, "Destination is invalid")
+          end
+
+          context "and board is changed" do
+            before(:each) do
+              @test = test_board
+              #empty_board[4][3] = Rook.new(:white)
+              #empty_board[4][1] = Pawn.new(:black)
+              #empty_board[4][6] = Pawn.new(:white)
+            end
+
+            it "will raise error if destination is option" do
+              expect{@player1.move("D4", "H4")}.to raise_error(StandardError)
+              expect{@player1.move("D4", "G4")}.to raise_error(StandardError)
+              expect{@player1.move("D4", "A4")}.to raise_error(StandardError)
+              expect{@player1.move("D4", "B4")}.not_to raise_error
+            end
           end
         end
       end
