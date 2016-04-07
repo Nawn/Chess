@@ -1,5 +1,5 @@
 class Piece
-  attr_reader :display, :team_color, :directions, :moved
+  attr_reader :display, :team_color, :directions, :moved, :distance
   
   def self.directions
     [:up, :down, :left, :right]
@@ -80,7 +80,7 @@ class Pawn < Piece
     @directions = [:up, :upleft, :upright]
   end
 
-  def moves(input_rows, start_pos, distance = @distance)
+  def moves(input_rows, start_pos, distance = @distance, display = true)
     potential_moves = super(input_rows, start_pos, distance, false) #Get an array of Coordinates upleft - upright
 
     temp_rows = input_rows.map(&:dup) #Copy rows so we can fuck with em
@@ -119,7 +119,7 @@ class Pawn < Piece
       end
     end
 
-    puts Board.table(temp_rows) #Print out a display of potential moves
+    puts Board.table(temp_rows) if display #Print out a display of potential moves
     up + diag #Then return the array of potentials
   end
 end
@@ -135,7 +135,7 @@ class Knight < Piece
     @horizontals = Piece.directions[2..3]
   end
 
-  def moves(input_rows, start_pos, distance = @distance)
+  def moves(input_rows, start_pos, distance = @distance, display = true)
     temp_rows = input_rows.map(&:dup) #Copy rows so we can fuck with em
     potential_moves = []
 
@@ -162,7 +162,7 @@ class Knight < Piece
         end
       end
 
-    puts Board.table(temp_rows)
+    puts Board.table(temp_rows) if display
     potential_moves
   end
 end
@@ -174,7 +174,7 @@ class King < Piece
     @distance = 1
   end
 
-  def moves(input_rows, start_pos, distance = @distance)
+  def moves(input_rows, start_pos, distance = @distance, display = true)
     moves = super(input_rows, start_pos, distance, false)
     throwaway = input_rows.map(&:dup)
     acceptable = []
@@ -187,7 +187,7 @@ class King < Piece
       Board.mark(throwaway, coord)
     end
 
-    puts Board.table(throwaway)
+    puts Board.table(throwaway) if display
     acceptable
   end
 

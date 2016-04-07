@@ -29,7 +29,7 @@ class Player
   def move(start, destination, board_array = @board.rows)
     start_piece = select(start)
     #def moves(input_rows, start_pos, distance = @distance, display = true)
-    moves = start_piece.moves(board_array, start)
+    moves = start_piece.moves(board_array, start, start_piece.distance, false)
     raise ArgumentError.new("Destination is invalid") unless moves.include?(destination)
   end
 end
