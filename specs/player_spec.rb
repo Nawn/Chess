@@ -249,6 +249,16 @@ describe Player do
           expect(@test[4][2]).to be_instance_of(Rook)
         end
       end
+
+      context "if destination is enemy piece" do
+        it "will move your piece to destination" do
+          expect(@test[4][3]).to be_instance_of(Rook)
+          expect(@test[4][1]).to be_instance_of(Pawn)
+          @player1.move("D4", "B4", @test)
+          expect(@test[4][3]).to eql(" ")
+          expect(@test[4][1]).to be_instance_of(Rook)
+        end
+      end
     end
   end
 end
