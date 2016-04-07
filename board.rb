@@ -179,8 +179,4 @@ class Board
       array.reverse
     end.reverse!
   end
-
-  #Take the data in the rows, and create an ASCII board of it.
-  def table(input_row = @rows)
-  end
 end
