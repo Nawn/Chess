@@ -4,7 +4,7 @@ def test_board
   empty_row = Array.new(8, " ")
   empty_board = []
   8.times do |num|
-    empty_board << empty_row.clone
+    empty_board[num] = empty_row.clone
   end
   empty_board[4][3] = Rook.new(:white)
   empty_board[4][1] = Pawn.new(:black)
@@ -222,10 +222,10 @@ describe Player do
             end
 
             it "will raise error if destination is option" do
-              expect{@player1.move("D4", "H4")}.to raise_error(StandardError)
-              expect{@player1.move("D4", "G4")}.to raise_error(StandardError)
-              expect{@player1.move("D4", "A4")}.to raise_error(StandardError)
-              expect{@player1.move("D4", "B4")}.not_to raise_error
+              expect{@player1.move("D4", "H4", @test)}.to raise_error(StandardError)
+              expect{@player1.move("D4", "G4", @test)}.to raise_error(StandardError)
+              expect{@player1.move("D4", "A4", @test)}.to raise_error(StandardError)
+              expect{@player1.move("D4", "B4", @test)}.not_to raise_error
             end
           end
         end

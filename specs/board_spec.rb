@@ -257,7 +257,7 @@ describe Board do
     context "when given input" do
       context "if input is incorrect" do
         it "raises ArgumentError" do
-          expect{Board.line("left", :up)}.to raise_error(ArgumentError, "Input must be String, and Symbol")
+          expect{Board.line("left", :up)}.to raise_error(ArgumentError, "Input must be within board limits, got left")
           expect{Board.line(45, :down)}.to raise_error(ArgumentError, "Input must be String, and Symbol")
           expect{Board.line("A4", [:poop])}.to raise_error(ArgumentError, "Input must be String, and Symbol")
         end

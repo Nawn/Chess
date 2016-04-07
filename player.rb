@@ -25,6 +25,13 @@ class Player
     raise StandardError.new("Not your piece") unless piece.team_color == @team_color
     piece
   end
+
+  def move(start, destination, board_array = @board.rows)
+    start_piece = select(start)
+    #def moves(input_rows, start_pos, distance = @distance, display = true)
+    moves = start_piece.moves(board_array, start)
+    raise ArgumentError.new("Destination is invalid") unless moves.include?(destination)
+  end
 end
 
 class Artificial < Player; end

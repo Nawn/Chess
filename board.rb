@@ -65,7 +65,9 @@ class Board
   def self.line(position, direction)
     p_string = position.is_a? String
     d_string = direction.is_a? Symbol
-    raise ArgumentError.new("Input must be String, and Symbol") unless p_string && d_string && position =~ /[A-H][1-8]/
+    p_board = position =~ /[A-H][1-8]/
+    raise ArgumentError.new("Input must be String, and Symbol") unless p_string && d_string
+    raise ArgumentError.new("Input must be within board limits, got #{position}") unless p_board
     
     case direction
     when :up

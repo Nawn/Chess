@@ -139,20 +139,28 @@ class Knight < Piece
     temp_rows = input_rows.map(&:dup) #Copy rows so we can fuck with em
     potential_moves = []
 
-    @verticals.each do |symbol|
-      two_away = Board.line(Board.line(start_pos, symbol), symbol) #up, up/down, down
-      @horizontals.each do |h_symbol| 
-        potential_moves = potential_moves + ping(temp_rows, two_away, h_symbol, 1) #left, right
+      @verticals.each do |symbol|
+        begin
+          two_away = Board.line(Board.line(start_pos, symbol), symbol) #up, up/down, down
+          @horizontals.each do |h_symbol| 
+            potential_moves = potential_moves + ping(temp_rows, two_away, h_symbol, 1) #left, right
+          end
+        rescue ArgumentError => e
+          next
+        end
       end
-    end
 
-    @horizontals.each do |symbol|
-      two_away = Board.line(Board.line(start_pos, symbol), symbol) #left, left/ right, right
+      @horizontals.each do |symbol|
+        begin
+          two_away = Board.line(Board.line(start_pos, symbol), symbol) #left, left/ right, right
 
-      @verticals.each do |v_symbol|
-        potential_moves = potential_moves + ping(temp_rows, two_away, v_symbol, 1)#up,down
+          @verticals.each do |v_symbol|
+            potential_moves = potential_moves + ping(temp_rows, two_away, v_symbol, 1)#up,down
+          end
+        rescue ArgumentError => e
+          next
+        end
       end
-    end
 
     puts Board.table(temp_rows)
     potential_moves
