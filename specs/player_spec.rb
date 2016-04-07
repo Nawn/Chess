@@ -194,15 +194,11 @@ describe Player do
         end
 
         context "if destination is not a potential move" do
-          before(:each) do
-            empty_row = Array.new(8, " ")
-            @empty_board = []
-            8.times do |num|
-              @empty_board[num] = empty_row.clone
-            end
+          it "raises StandardError" do
+            expect{@player1.move("D2", "D3")}.not_to raise_error
+            expect{@player1.move("E2", "E4")}.not_to raise_error
+            expect{@player1.move("G1", "F3")}.not_to raise_error
           end
-
-          
         end
       end
     end
