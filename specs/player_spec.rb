@@ -215,17 +215,17 @@ describe Player do
 
           context "and board is changed" do
             before(:each) do
-              @test = test_board
+              @board.rows = test_board
               #empty_board[4][3] = Rook.new(:white)
               #empty_board[4][1] = Pawn.new(:black)
               #empty_board[4][6] = Pawn.new(:white)
             end
 
             it "will raise error if destination is option" do
-              expect{@player1.move("D4", "H4", @test)}.to raise_error(StandardError)
-              expect{@player1.move("D4", "G4", @test)}.to raise_error(StandardError)
-              expect{@player1.move("D4", "A4", @test)}.to raise_error(StandardError)
-              expect{@player1.move("D4", "B4", @test)}.not_to raise_error
+              expect{@player1.move("D4", "H4")}.to raise_error(StandardError)
+              expect{@player1.move("D4", "G4")}.to raise_error(StandardError)
+              expect{@player1.move("D4", "A4")}.to raise_error(StandardError)
+              expect{@player1.move("D4", "B4")}.not_to raise_error
             end
           end
         end
@@ -242,21 +242,21 @@ describe Player do
 
       context "if destination is empty" do
         it "will move the piece to the destination" do
-          expect(@test[4][3]).to be_instance_of(Rook)
-          expect(@test[4][2]).to eql(" ")
-          @player1.move("D4", "C4", @test)
-          expect(@test[4][3]).to eql(" ")
-          expect(@test[4][2]).to be_instance_of(Rook)
+          expect(@board.rows[4][3]).to be_instance_of(Rook)
+          expect(@board.rows[4][2]).to eql(" ")
+          @player1.move("D4", "C4")
+          expect(@board.rows[4][3]).to eql(" ")
+          expect(@board.rows[4][2]).to be_instance_of(Rook)
         end
       end
 
       context "if destination is enemy piece" do
         it "will move your piece to destination" do
-          expect(@test[4][3]).to be_instance_of(Rook)
-          expect(@test[4][1]).to be_instance_of(Pawn)
-          @player1.move("D4", "B4", @test)
-          expect(@test[4][3]).to eql(" ")
-          expect(@test[4][1]).to be_instance_of(Rook)
+          expect(@board.rows[4][3]).to be_instance_of(Rook)
+          expect(@board.rows[4][1]).to be_instance_of(Pawn)
+          @player1.move("D4", "B4")
+          expect(@board.rows[4][3]).to eql(" ")
+          expect(@board.rows[4][1]).to be_instance_of(Rook)
         end
       end
     end

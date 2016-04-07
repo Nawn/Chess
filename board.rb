@@ -5,7 +5,8 @@ require_relative 'piece.rb'
 #"\e[46m#{knight.display}\e[0m"
 
 class Board
-  attr_reader :rows, :players, :view
+  attr_accessor :rows
+  attr_reader :players, :view
 
   def initialize (input_symbol = :multiplayer)
     raise ArgumentError.new("Incorrect input") unless input_symbol.is_a? Symbol
