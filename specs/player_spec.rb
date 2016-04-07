@@ -231,5 +231,7 @@ describe Player do
         end
       end
     end
+
+    #To-Do: write the actual movement/taking specs
   end
 end
