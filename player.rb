@@ -31,6 +31,9 @@ class Player
     #def moves(input_rows, start_pos, distance = @distance, display = true)
     moves = start_piece.moves(board_array, start, start_piece.distance, false)
     raise ArgumentError.new("Destination is invalid") unless moves.include?(destination)
+
+    board_array[Player.coord_string(start)[0]][Player.coord_string(start)[1]] = " "
+    board_array[Player.coord_string(destination)[0]][Player.coord_string(destination)[1]] = start_piece    
   end
 end
 
