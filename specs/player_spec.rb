@@ -232,6 +232,23 @@ describe Player do
       end
     end
 
-    #To-Do: write the actual movement/taking specs
+    context "when given valid input" do
+      before(:each) do
+        @test = test_board
+        #empty_board[4][3] = Rook.new(:white)
+        #empty_board[4][1] = Pawn.new(:black)
+        #empty_board[4][6] = Pawn.new(:white)
+      end
+
+      context "if destination is empty" do
+        it "will move the piece to the destination" do
+          expect(@test[4][3]).to be_instance_of(Rook)
+          expect(@test[4][2]).to eql(" ")
+          @player1.move("D4", "C4", @test)
+          expect(@test[4][3]).to eql(" ")
+          expect(@test[4][2]).to be_instance_of(Rook)
+        end
+      end
+    end
   end
 end
