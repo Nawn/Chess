@@ -37,26 +37,16 @@ describe Board do
       context "and given valid input" do
         before(:each) do
           @board = Board.new(:multiplayer)
-          @board2 = Board.new(:singleplayer)
         end
 
         it "creates new Board object" do
           expect(@board).to be_instance_of(Board)
-          expect(@board2).to be_instance_of(Board)
         end
 
         context "and given :multiplayer" do
           it "creates a Board with 2 players in #players array" do
             expect(@board.players).to be_instance_of(Array)
             expect(@board.players.all? {|player| player.is_a? Player}).to be true
-          end
-        end
-
-        context "and given :singleplayer" do
-          it "creates a Board with 1 Player and 1 Artificial in #players array" do
-            expect(@board2.players).to be_instance_of(Array)
-            expect(@board2.players[0]).to be_instance_of(Player)
-            expect(@board2.players[1]).to be_instance_of(Artificial)
           end
         end
       end

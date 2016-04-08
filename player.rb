@@ -36,5 +36,3 @@ class Player
     board_array[Player.coord_string(destination)[0]][Player.coord_string(destination)[1]] = start_piece    
   end
 end
-
-class Artificial < Player; end

@@ -14,8 +14,6 @@ class Board
     case input_symbol #Depending on the input
     when :multiplayer 
       @players = [Player.new(:white, self), Player.new(:black, self)] #Make both players human
-    when :singleplayer
-      @players = [Player.new(:white, self), Artificial.new(:black, self)] #Make a Human vs AI
     else
       raise ArgumentError.new("#{input_symbol.to_s} is not acceptable input") #Raise Error, unacceptable input
     end
