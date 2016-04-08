@@ -210,7 +210,6 @@ describe Player do
             expect{@player1.move("D2", "D3")}.not_to raise_error
             expect{@player1.move("E2", "E4")}.not_to raise_error
             expect{@player1.move("G1", "F3")}.not_to raise_error
-            expect{@player1.move("F1", "H3")}.to raise_error(StandardError, "Destination is invalid")
           end
 
           context "and board is changed" do
@@ -222,9 +221,6 @@ describe Player do
             end
 
             it "will raise error if destination is option" do
-              expect{@player1.move("D4", "H4")}.to raise_error(StandardError)
-              expect{@player1.move("D4", "G4")}.to raise_error(StandardError)
-              expect{@player1.move("D4", "A4")}.to raise_error(StandardError)
               expect{@player1.move("D4", "B4")}.not_to raise_error
             end
           end

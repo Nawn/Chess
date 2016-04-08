@@ -33,20 +33,21 @@ class Player
 	  	start_coord = Player.player_input(gets.chomp)
 	  	start_piece = select(start_coord)
 	  	#def moves(input_rows, start_pos, distance = @distance, display = true)
-	  	moves = start_piece.moves(@board.rows, start_coord)
-	  	
-	  	raise StandardError.new("\n\nNo moves available for piece at #{start_coord}, returning to Piece select\n\n".upcase) if moves.empty?
-	  	acceptable_pos = ""
-	  	moves.each {|coord| acceptable_pos += "\t#{coord}\n"}
-	  	puts "You may move piece to:\n#{acceptable_pos}"
-	  	puts "Please enter destination coordinates"
-	  	destination_coord = Player.player_input(gets.chomp)
+      moves = start_piece.moves(@board.rows, start_coord)
+      
+      raise StandardError.new("\n\nNo moves available for piece at #{start_coord}, returning to Piece select\n\n".upcase) if moves.empty?
+      acceptable_pos = ""
+      moves.each {|coord| acceptable_pos += "\t#{coord}\n"}
+      puts "You may move piece to:\n#{acceptable_pos}"
+      puts "Please enter destination coordinates"
+      destination_coord = Player.player_input(gets.chomp)
+      raise ArgumentError.new("Destination is invalid") unless moves.include?(destination_coord)
 
-	  	move(start_coord, destination_coord)
-		rescue StandardError => m
-			puts "#{m}"
-			retry
-		end
+      move(start_coord, destination_coord)
+    rescue StandardError => m
+      puts "#{m}"
+      retry
+    end
   end
 
   def select(input_string)
@@ -60,8 +61,6 @@ class Player
   def move(start, destination, board_array = @board.rows)
     start_piece = select(start)
     #def moves(input_rows, start_pos, distance = @distance, display = true)
-    moves = start_piece.moves(board_array, start, start_piece.distance, false)
-    raise ArgumentError.new("Destination is invalid") unless moves.include?(destination)
 
     board_array[Player.coord_string(start)[0]][Player.coord_string(start)[1]] = " "
     board_array[Player.coord_string(destination)[0]][Player.coord_string(destination)[1]] = start_piece
