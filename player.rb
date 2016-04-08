@@ -1,9 +1,16 @@
 class Player
   attr_reader :team_color, :board
 
+  def self.player_input(input_string)
+  	exit if input_string.downcase == "exit"
+  	potential_backs = %w(return back select)
+  	raise StandardError.new("\n\nReturning to Piece select\n\n") if potential_backs.any? {|back_string| back_string == input_string.downcase}
+  	input_string.gsub(/\s+/, "").upcase
+  end
+
   def self.coord_string(input_string)
     raise ArgumentError.new("Input must be String") unless input_string.is_a? String
-    input_string = input_string.gsub(/\s+/, "").upcase
+    input_string = Player.player_input(input_string)
     raise ArgumentError.new("Input incorrect. Example: C4, B2, A3, etc.") unless input_string =~ /[A-H][1-8]/
 
     [8-input_string[1].to_i, input_string[0].ord - 65]
@@ -16,6 +23,30 @@ class Player
     raise ArgumentError.new("Requires team_color Symbol, and Board reference") unless t && b
     @team_color = team_sym
     @board = host_board
+  end
+
+  def turn
+  	begin
+  		puts "\n\n IT IS NOW #{@team_color.upcase}'S TURN\n\n"
+	  	@board.display
+	  	puts "Please input the coordinates of piece to grab"
+	  	start_coord = Player.player_input(gets.chomp)
+	  	start_piece = select(start_coord)
+	  	#def moves(input_rows, start_pos, distance = @distance, display = true)
+	  	moves = start_piece.moves(@board.rows, start_coord)
+	  	
+	  	raise StandardError.new("\n\nNo moves available for piece at #{start_coord}, returning to Piece select\n\n".upcase) if moves.empty?
+	  	acceptable_pos = ""
+	  	moves.each {|coord| acceptable_pos += "\t#{coord}\n"}
+	  	puts "You may move piece to:\n#{acceptable_pos}"
+	  	puts "Please enter destination coordinates"
+	  	destination_coord = Player.player_input(gets.chomp)
+
+	  	move(start_coord, destination_coord)
+		rescue StandardError => m
+			puts "#{m}"
+			retry
+		end
   end
 
   def select(input_string)
@@ -33,6 +64,7 @@ class Player
     raise ArgumentError.new("Destination is invalid") unless moves.include?(destination)
 
     board_array[Player.coord_string(start)[0]][Player.coord_string(start)[1]] = " "
-    board_array[Player.coord_string(destination)[0]][Player.coord_string(destination)[1]] = start_piece    
+    board_array[Player.coord_string(destination)[0]][Player.coord_string(destination)[1]] = start_piece
+    start_piece.move
   end
 end

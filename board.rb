@@ -94,6 +94,13 @@ class Board
     Board.mark(@rows, position, object)
   end
 
+  def turn
+    flip(@players[0].team_color)
+    player = @players.shift
+    player.turn
+    @players.push(player)
+  end
+
   def flip(color_sym=nil)
     flip_check(color_sym)
 
