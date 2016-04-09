@@ -91,7 +91,7 @@ class Board
   end
 
   def self.select(input_rows, selected_coord)
-    row, pos = Player.coord_string(input_string)
+    row, pos = Player.coord_string(selected_coord)
     input_rows[row][pos]
   end
 
