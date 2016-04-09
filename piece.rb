@@ -10,7 +10,6 @@ class Piece
   end
   
   def initialize(color_sym, host_board)
-    raise ArgumentError.new("Piece must be given team_color") if color_sym.nil?
     raise ArgumentError.new("requires Symbol of team_color") unless color_sym.is_a? Symbol
     @team_color = color_sym
     
