@@ -22,6 +22,13 @@ class Board
     @rows = new_board #Run fresh Chess Set up
   end
 
+  def self.ary_to_coord(input_array)
+    raise ArgumentError.new("Input must be Array") unless input_array.is_a? Array
+    raise ArgumentError.new("Input must be 2 Integers") unless input_array.size == 2 && input_array.all? {|elem| elem.is_a? Integer}
+
+    "#{(65 + input_array[1].to_i).chr}#{8 - input_array[0].to_i}"
+  end
+
   #Returns a Terminal::Table Object
   def self.table(input_rows)
     rows = []
