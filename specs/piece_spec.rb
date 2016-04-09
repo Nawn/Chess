@@ -194,3 +194,76 @@ describe Piece do
     end
   end
 end
+
+describe Pawn do
+  before(:each) do
+    @board = Board.new
+    @white_player = @board.players[0]
+    @black_player = @board.players[1]
+    empty_row = Array.new(8, " ")
+    empty_board = []
+    8.times do |num|
+      empty_board[num] = empty_row.clone
+    end
+    @board.rows = empty_board
+
+    @board.mark("D4", Pawn.new(:white, @board))
+    @board.mark("E5", Pawn.new(:black, @board)) 
+    @board.mark("D7", Pawn.new(:white, @board))
+    @board.mark("E2", Pawn.new(:black, @board))         
+  end
+
+  describe "#move" do
+    context "when moved to a regular space" do
+      context "when white player" do
+        it "does not change the Pawn to Queen" do
+          expect(@board.select("D4")).to be_instance_of(Pawn)
+          expect(@board.select("D5")).to eql(" ")
+          @white_player.move("D4", "D5")
+          expect(@board.select("D4")).to eql(" ")
+          expect(@board.select("D5")).to be_instance_of(Pawn)
+        end
+      end
+
+      context "when black player" do
+        before(:each) do
+          @board.flip(@black_player.team_color)
+        end
+
+        it "does not change the Pawn to Queen" do
+          expect(@board.select("D4")).to be_instance_of(Pawn)
+          expect(@board.select("D5")).to eql(" ")
+          @black_player.move("D4", "D5")
+          expect(@board.select("D4")).to eql(" ")
+          expect(@board.select("D5")).to be_instance_of(Pawn)          
+        end
+      end
+    end
+
+    context "when moved to an ending piece" do
+      context "when white player" do
+        it "does not change the Pawn to Queen" do
+          expect(@board.select("D7")).to be_instance_of(Pawn)
+          expect(@board.select("D8")).to eql(" ")
+          @white_player.move("D7", "D8")
+          expect(@board.select("D7")).to eql(" ")
+          expect(@board.select("D8")).to be_instance_of(Queen)
+        end
+      end
+
+      context "when black player" do
+        before(:each) do
+          @board.flip(@black_player.team_color)
+        end
+
+        it "does not change the Pawn to Queen" do
+          expect(@board.select("D7")).to be_instance_of(Pawn)
+          expect(@board.select("D8")).to eql(" ")
+          @black_player.move("D7", "D8")
+          expect(@board.select("D7")).to eql(" ")
+          expect(@board.select("D8")).to be_instance_of(Queen)          
+        end
+      end
+    end
+  end
+end

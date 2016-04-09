@@ -112,7 +112,6 @@ class Board
 
   def turn
     flip(@players[0].team_color)
-    calibrate()
     player = @players.shift
     player.turn
     @players.push(player)
@@ -136,6 +135,7 @@ class Board
         reverse()
       end
     end
+    calibrate()
   end
 
   def display(input_rows=nil)
