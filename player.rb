@@ -11,7 +11,7 @@ class Player
   def self.coord_string(input_string)
     raise ArgumentError.new("Input must be String") unless input_string.is_a? String
     input_string = Player.player_input(input_string)
-    raise ArgumentError.new("Input incorrect. Example: C4, B2, A3, etc. you input #{input_string}") unless input_string =~ /[A-H][1-8]/
+    raise ArgumentError.new("Input incorrect. Example: C4, B2, A3, etc.") unless input_string =~ /[A-H][1-8]/
 
     [8-input_string[1].to_i, input_string[0].ord - 65]
   end

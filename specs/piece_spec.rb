@@ -109,7 +109,7 @@ describe Piece do
         expect{@piece.ping(:left)}.not_to raise_error
         expect{@piece.ping(:left, 5)}.not_to raise_error
         expect{@piece.ping(:left, 0, "D4")}.not_to raise_error
-        expect{@piece.ping(:left, 0, "D4", [])}.to raise_error
+        expect{@piece.ping(:left, 0, "D4", [])}.to raise_error(ArgumentError)
       end
     end
 
@@ -188,94 +188,6 @@ describe Piece do
           it "will terminate early if nothing left to check" do
             @piece.position = "E7"
             expect(@piece.ping(:upleft, 3)).to eql(%w(D8))
-          end
-        end
-      end
-    end
-  end
-end
-
-describe Rook do
-  before(:each) do
-    @board = Board.new
-    @rook = Rook.new(:white, @board)
-  end
-
-  it "is a Piece" do
-    expect(Rook).to be < Piece 
-  end
-
-  it "is a kind of Piece" do
-    expect(@rook).to be_kind_of(Piece)
-  end
-
-  describe "#directions" do
-    it "returns an Array" do
-      expect(@rook.directions).to be_kind_of(Array)
-    end
-
-    it "contains only symbols" do
-      expect(@rook.directions.all? {|direction| direction.is_a? Symbol})
-    end
-
-    it "can go up, down, left and right" do
-      expect(@rook.directions).to eql([:up, :down, :left, :right])
-    end
-  end
-
-  describe "#moves" do
-    before(:each) do
-      @board = Board.new
-      empty_row = Array.new(8, " ")
-      empty_board = []
-      8.times do |number|
-        empty_board[number] = empty_row.clone
-      end
-
-      @empty_board = empty_board.clone
-    end
-
-    context "when given incorrect # of params" do
-      it "raises ArgumentError" do
-        expect{@rook.moves()}.to raise_error(ArgumentError)
-        expect{@rook.moves(@empty_board)}.to raise_error(ArgumentError)
-        expect{@rook.moves(@empty_board, "D4")}.not_to raise_error
-        expect{@rook.moves(@empty_board, "D4", true)}.not_to raise_error
-        expect{@rook.moves(@empty_board, "D4", true, 4)}.to raise_error(ArgumentError)
-      end
-    end
-
-    context "when given correct # of params" do
-      context "when input is incorrect" do
-        it "raises error" do
-          expect{@rook.moves(5, 20)}.to raise_error(ArgumentError)
-          expect{@rook.moves([], 20)}.to raise_error(ArgumentError)
-          expect{@rook.moves(@empty_board, 20)}.to raise_error(ArgumentError)
-          expect{@rook.moves(5, "D4")}.to raise_error(ArgumentError)
-        end
-      end
-
-      context "when input is correct" do
-        it "does not raise error" do
-          expect{@rook.moves(@empty_board, "D4")}.not_to raise_error
-        end
-
-        it "returns all potential moves" do
-          expect(@rook.moves(@empty_board, "D4")).to eql(%w(D5 D6 D7 D8 D3 D2 D1 C4 B4 A4 E4 F4 G4 H4))
-        end
-
-        context "with other pieces on board" do
-          before(:each) do
-            @pop_board = @empty_board.clone
-            to_add = [["D4", :white], ["D7", :black], ["B4", :white]]
-            to_add.each do |array|
-              cur_row, cur_pos = Player.coord_string(array[0])
-              @pop_board[cur_row][cur_pos] = Rook.new(array[1], @board)
-            end
-          end
-
-          it "returns potential moves" do
-            expect(@rook.moves(@pop_board, "D4")).to eql(%w(D5 D6 D7 D3 D2 D1 C4 E4 F4 G4 H4))
           end
         end
       end

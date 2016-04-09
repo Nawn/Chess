@@ -93,20 +93,24 @@ class Pawn < Piece
     potentials = []
 
     moves.each do |key, value|
-      if key == :up
-        up_piece = @board.select(value)
-        unless up_piece.is_a?(Piece)
-          potentials = potentials + [value]
-          second_piece = Board.line(value, key)
-          unless @board.select(second_piece).is_a?(Piece)
-            potentials = potentials + [second_piece] unless @moved
+      begin
+        if key == :up
+          up_piece = @board.select(value)
+          unless up_piece.is_a?(Piece)
+            potentials = potentials + [value]
+            second_piece = Board.line(value, key)
+            unless @board.select(second_piece).is_a?(Piece)
+              potentials = potentials + [second_piece] unless @moved
+            end
+          end
+        else
+          cur_piece = @board.select(value)
+          if cur_piece.is_a? Piece
+            potentials = potentials + [value] if cur_piece.team_color != @team_color
           end
         end
-      else
-        cur_piece = @board.select(value)
-        if cur_piece.is_a? Piece
-          potentials = potentials + [value] if cur_piece.team_color != @team_color
-        end
+      rescue
+        next
       end
     end
 
