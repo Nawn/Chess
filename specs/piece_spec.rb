@@ -96,92 +96,98 @@ describe Piece do
       8.times do |index|
         final_rows[index] = empty_row.clone
       end
-      @empty_board = final_rows
-      @piece = Piece.new(:white, @board)
+      @empty_board = Board.new
+      @empty_board.rows = final_rows
+      @piece = Piece.new(:white, @empty_board)
+      @piece.position = "D4"
+      @empty_board.rows[4][3] = @piece
     end
 
     context "when given invalid # of params" do
       it "raises ArgumentError" do
         expect{@piece.ping()}.to raise_error(ArgumentError)
-        expect{@piece.ping(@empty_board.clone)}.to raise_error(ArgumentError)
-        expect{@piece.ping(@empty_board.clone, "A1")}.to raise_error(ArgumentError)
-        expect{@piece.ping(@empty_board.clone, "A1", :left)}.not_to raise_error
-        expect{@piece.ping(@empty_board.clone, "A1", :left, 5)}.not_to raise_error
-        expect{@piece.ping(@empty_board.clone, "A1", :left, 0, "uhh")}.to raise_error(ArgumentError)
+        expect{@piece.ping(:left)}.not_to raise_error
+        expect{@piece.ping(:left, 5)}.not_to raise_error
+        expect{@piece.ping(:left, 0, "D4")}.not_to raise_error
+        expect{@piece.ping(:left, 0, "D4", [])}.to raise_error
       end
     end
 
     context "when given correct # of params" do
       context "if input are incorrect" do
         it "raises Error" do
-          expect{@piece.ping([], "B2", :down)}.to raise_error(ArgumentError, "Row must be 8x8")
-          expect{@piece.ping(@empty_board.clone, "A2", :top)}.to raise_error(StandardError, "top not recognized")
-          expect{@piece.ping(@empty_board.clone, "D5", :left, "caca")}.to raise_error(ArgumentError, "Distance must be Integer")
+          expect{@piece.ping(:top)}.to raise_error(StandardError, "top not recognized")
+          expect{@piece.ping(:left, "caca")}.to raise_error(ArgumentError, "Distance must be Integer")
         end
       end
 
+      #def ping(direction, counter=0, start = @position)
       context "if input are valid" do
         it "does not raise error" do
-          expect{@piece.ping(@empty_board.clone, "C4", :left)}.not_to raise_error
+          expect{@piece.ping(:left)}.not_to raise_error
         end
 
         it "returns an Array" do
-          expect(@piece.ping(@empty_board.clone, "C4", :left)).to be_instance_of(Array)
+          expect(@piece.ping(:left)).to be_instance_of(Array)
         end
 
         context "if given left" do
           it "returns Array of Coordinates to the left" do
-            expect(@piece.ping(@empty_board.clone, "D4", :left)).to eql(%w(C4 B4 A4))
+            expect(@piece.ping(:left)).to eql(%w(C4 B4 A4))
           end
         end
 
         context "if given right" do
           it "returns Array of Coordinates to the right" do
-            expect(@piece.ping(@empty_board.clone, "D4", :right)).to eql(%w(E4 F4 G4 H4))
+            expect(@piece.ping(:right)).to eql(%w(E4 F4 G4 H4))
           end
         end
 
         context "if given others" do
           it "returns appropriate Array of Coordinates" do
-            expect(@piece.ping(@empty_board.clone, "D4", :up)).to eql(%w(D5 D6 D7 D8))
-            expect(@piece.ping(@empty_board.clone, "D4", :down)).to eql(%w(D3 D2 D1))
-            expect(@piece.ping(@empty_board.clone, "D4", :upright)).to eql(%w(E5 F6 G7 H8))
+            expect(@piece.ping(:up)).to eql(%w(D5 D6 D7 D8))
+            expect(@piece.ping(:down)).to eql(%w(D3 D2 D1))
+            expect(@piece.ping(:upright)).to eql(%w(E5 F6 G7 H8))
           end
         end
 
         context "when it runs into another piece" do
           before(:each) do
-            @pop_board = @empty_board.clone
+            empty = @empty_board.rows.map(&:dup)
             to_add = [["D8", :white], ["B6", :black], ["D2", :black], ["F2", :white]]
             to_add.each do |array|
               row, pos = Player.coord_string(array[0])
-              @pop_board[row][pos] = Pawn.new(array[1], @board)
+              empty[row][pos] = Pawn.new(array[1], @empty_board)
             end
+            @empty_board.rows = empty
+            @empty_board.rows[4][3] = @piece = Piece.new(:white, @empty_board)
+            @piece.position = "D4"
           end
 
           context "if the piece is an Ally" do
             it "terminates early, and returns Array" do
-              expect(@piece.ping(@pop_board, "D4", :up)).to eql(%w(D5 D6 D7))
-              expect(@piece.ping(@pop_board, "D4", :downright)).to eql(%w(E3))
+              expect(@piece.ping(:up)).to eql(%w(D5 D6 D7))
+              expect(@piece.ping(:downright)).to eql(%w(E3))
             end
           end
 
           context "if the piece is an Enemy" do
             it "terminates early, and returns Array including enemy Piece coord" do
-              expect(@piece.ping(@pop_board, "D4", :upleft)).to eql(%w(C5 B6))
-              expect(@piece.ping(@pop_board, "D4", :down)).to eql(%w(D3 D2))
+              expect(@piece.ping(:upleft)).to eql(%w(C5 B6))
+              expect(@piece.ping(:down)).to eql(%w(D3 D2))
             end
           end
         end
 
         context "when given distance param" do
           it "only pings that far" do
-            expect(@piece.ping(@empty_board, "D4", :upright, 3)).to eql(%w(E5 F6 G7))
-            expect(@piece.ping(@empty_board, "D4", :downleft, 2)).to eql(%w(C3 B2))
+            expect(@piece.ping(:upright, 3)).to eql(%w(E5 F6 G7))
+            expect(@piece.ping(:downleft, 2)).to eql(%w(C3 B2))
           end
 
           it "will terminate early if nothing left to check" do
-            expect(@piece.ping(@empty_board, "E7", :upleft, 3)).to eql(%w(D8))
+            @piece.position = "E7"
+            expect(@piece.ping(:upleft, 3)).to eql(%w(D8))
           end
         end
       end

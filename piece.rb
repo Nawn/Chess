@@ -28,19 +28,19 @@ class Piece
     @position = input_coord
   end
 
-  def ping(edit_array, start, direction, counter=0)
-    raise ArgumentError.new("Rows must be String") unless edit_array.is_a? Array
-    row_size = edit_array.size == 8 && edit_array.all? {|row| row.size == 8}
+  def ping(direction, counter=0, start = @position)
+    raise ArgumentError.new("Rows must be String") unless @board.rows.is_a? Array
+    row_size = @board.rows.size == 8 && @board.rows.all? {|row| row.size == 8}
     raise ArgumentError.new("Row must be 8x8") unless row_size
     raise ArgumentError.new("Distance must be Integer") unless counter.is_a? Integer
 
     next_space = Board.line(start, direction)
     begin
-      current_row, current_position = Player.coord_string(next_space) #Current as in the one we're looking at
+      current_piece = @board.select(next_space) 
     rescue ArgumentError => e
       return []
     end
-    current_piece = edit_array[current_row][current_position] #Current piece is whatever we currently have
+    #Current piece is whatever we currently have
 
 
     if current_piece.is_a? Piece
@@ -51,8 +51,8 @@ class Piece
       end
     else
       return [next_space] if counter == 1 #If we set a limit, and we're at 1, that means this is the last empty spot
-      return ([next_space] + ping(edit_array, next_space, direction, counter)) if counter.zero? #If it's 0, then that means we didn't set a counter
-      return ([next_space] + ping(edit_array, next_space, direction, counter-1)) #If we did set a counter, then return the next with a -1 to counter.
+      return ([next_space] + ping(direction, counter, next_space)) if counter.zero? #If it's 0, then that means we didn't set a counter
+      return ([next_space] + ping(direction, counter-1, next_space)) #If we did set a counter, then return the next with a -1 to counter.
     end
   end
 
