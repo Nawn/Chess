@@ -6,9 +6,9 @@ def test_board
   8.times do |num|
     empty_board[num] = empty_row.clone
   end
-  empty_board[4][3] = Rook.new(:white)
-  empty_board[4][1] = Pawn.new(:black)
-  empty_board[4][6] = Pawn.new(:white)
+  empty_board[4][3] = Rook.new(:white, Board.new)
+  empty_board[4][1] = Pawn.new(:black, Board.new)
+  empty_board[4][6] = Pawn.new(:white, Board.new)
   empty_board
 end
 

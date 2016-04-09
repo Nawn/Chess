@@ -9,7 +9,7 @@ class Piece
     [:upleft, :upright, :downleft, :downright]
   end
   
-  def initialize(color_sym = nil)
+  def initialize(color_sym = nil, host_board)
     raise ArgumentError.new("Piece must be given team_color") if color_sym.nil?
     raise ArgumentError.new("requires Symbol of team_color") unless color_sym.is_a? Symbol
     @team_color = color_sym
@@ -19,6 +19,7 @@ class Piece
     @display = "#{@team_color.to_s[0].upcase}#{self.class.to_s[0].upcase}".to_sym
     @distance = 0
     @moved = false
+    @board = host_board
   end
 
   def move
@@ -74,8 +75,8 @@ class Piece
 end
 
 class Pawn < Piece
-  def initialize(color_sym=nil)
-    super(color_sym)
+  def initialize(color_sym=nil, host_board)
+    super(color_sym, host_board)
     @distance = 1
     @directions = [:up, :upleft, :upright]
   end
@@ -126,8 +127,8 @@ end
 
 class Knight < Piece
   attr_reader :horizontals, :verticals
-  def initialize(color_sym=nil)
-    super(color_sym)
+  def initialize(color_sym=nil, host_board)
+    super(color_sym, host_board)
     #Knights and Kings have the same Class initial
     #Knights will have an n after their K, to make them distinct
     @display = (@display.to_s + "n").to_sym
@@ -168,8 +169,8 @@ class Knight < Piece
 end
 
 class King < Piece
-  def initialize(color_sym=nil)
-    super(color_sym)
+  def initialize(color_sym=nil, host_board)
+    super(color_sym, host_board)
     @directions = Piece.directions.clone + Piece.diagonals.clone
     @distance = 1
   end
@@ -267,7 +268,7 @@ class King < Piece
   end
 
   def knight_check(input_rows, space)
-    knight = Knight.new(@team_color)
+    knight = Knight.new(@team_color, @board)
     potential_knights = []
 
     knight.verticals.each do |symbol|
@@ -287,10 +288,13 @@ class King < Piece
     end
 
     potential_knights.each do |coord|
-      knight_row, knight_pos = Player.coord_string(coord)
-      knight = input_rows[knight_row][knight_pos]
-      if knight.is_a? Knight
-        return true if knight.team_color != @team_color
+      begin
+        knight = Board.select(input_rows, coord)
+        if knight.is_a? Knight
+          return true if knight.team_color != @team_color
+        end
+      rescue
+        next
       end
     end
     false
@@ -298,23 +302,23 @@ class King < Piece
 end
 
 class Rook < Piece
-  def initialize(color_sym=nil)
-    super(color_sym)
+  def initialize(color_sym=nil, host_board)
+    super(color_sym, host_board)
     @directions = Piece.directions.clone
   end
 end
 
 class Bishop < Piece
-  def initialize(color_sym=nil)
-    super(color_sym)
+  def initialize(color_sym=nil, host_board)
+    super(color_sym, host_board)
     @directions = Piece.diagonals.clone
   end
 end
 
 
 class Queen < Piece
-  def initialize(color_sym=nil)
-    super(color_sym)
+  def initialize(color_sym=nil, host_board)
+    super(color_sym, host_board)
     @directions = Piece.directions.clone + Piece.diagonals.clone
   end
 end

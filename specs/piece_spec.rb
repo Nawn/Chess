@@ -4,23 +4,27 @@ describe Piece do
   describe "#new" do
     context "when given no input" do
       it "raises error" do
-        expect{Piece.new}.to raise_error(ArgumentError, "Piece must be given team_color")
+        expect{Piece.new}.to raise_error(ArgumentError)
       end
     end
 
     context "when given input" do
+      before(:each) do
+        @board = Board.new
+      end
       context "and input is invalid data type or Missing parameter" do
         it "raises ArgumentError" do
-          expect{Piece.new("Poopy")}.to raise_error(ArgumentError, "requires Symbol of team_color")
+          expect{Piece.new("Poopy")}.to raise_error(ArgumentError)
           expect{Piece.new(4, "5,3")}.to raise_error(ArgumentError)
-          expect{Piece.new(:white)}.not_to raise_error
+          expect{Piece.new(:white, @board)}.not_to raise_error
         end
       end
 
       context "and input is correct" do
         before(:each) do
-          @whitepiece = Piece.new(:white)
-          @blackpiece = Piece.new(:black)
+          @board = Board.new
+          @whitepiece = Piece.new(:white, @board)
+          @blackpiece = Piece.new(:black, @board)
         end
 
         it "creates piece object" do
@@ -33,7 +37,8 @@ describe Piece do
 
   describe "#display" do
     before(:each) do
-      @piece = Piece.new(:white)
+      @board = Board.new
+      @piece = Piece.new(:white, @board)
     end
 
     it "returns a Symbol" do
@@ -53,7 +58,8 @@ describe Piece do
 
   describe "#team_color" do
     before(:each) do
-      @piece = Piece.new(:white)
+      @board = Board.new
+      @piece = Piece.new(:white, @board)
     end
 
     it "returns a Symbol" do
@@ -61,8 +67,8 @@ describe Piece do
     end
 
     it "is set to initialized value" do
-      white_piece = Piece.new(:white)
-      black_piece = Piece.new(:black)
+      white_piece = Piece.new(:white, @board)
+      black_piece = Piece.new(:black, @board)
 
       expect(white_piece.team_color).to eql(:white)
       expect(black_piece.team_color).to eql(:black)
@@ -91,7 +97,7 @@ describe Piece do
         final_rows[index] = empty_row.clone
       end
       @empty_board = final_rows
-      @piece = Piece.new(:white)
+      @piece = Piece.new(:white, @board)
     end
 
     context "when given invalid # of params" do
@@ -149,7 +155,7 @@ describe Piece do
             to_add = [["D8", :white], ["B6", :black], ["D2", :black], ["F2", :white]]
             to_add.each do |array|
               row, pos = Player.coord_string(array[0])
-              @pop_board[row][pos] = Pawn.new(array[1])
+              @pop_board[row][pos] = Pawn.new(array[1], @board)
             end
           end
 
@@ -185,7 +191,8 @@ end
 
 describe Rook do
   before(:each) do
-    @rook = Rook.new(:white)
+    @board = Board.new
+    @rook = Rook.new(:white, @board)
   end
 
   it "is a Piece" do
@@ -212,7 +219,7 @@ describe Rook do
 
   describe "#moves" do
     before(:each) do
-      board = Board.new
+      @board = Board.new
       empty_row = Array.new(8, " ")
       empty_board = []
       8.times do |number|
@@ -258,7 +265,7 @@ describe Rook do
             to_add = [["D4", :white], ["D7", :black], ["B4", :white]]
             to_add.each do |array|
               cur_row, cur_pos = Player.coord_string(array[0])
-              @pop_board[cur_row][cur_pos] = Rook.new(array[1])
+              @pop_board[cur_row][cur_pos] = Rook.new(array[1], @board)
             end
           end
 

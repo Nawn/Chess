@@ -171,10 +171,10 @@ class Board
   #War_row is the row full of Kings, Queens, Rooks, etc.
   def war_row(team_color)
     return_row = []
-    return_row[0], return_row[7] = Rook.new(team_color), Rook.new(team_color)
-    return_row[1], return_row[6] = Knight.new(team_color), Knight.new(team_color)
-    return_row[2], return_row[5] = Bishop.new(team_color), Bishop.new(team_color)
-    return_row[3], return_row[4] = Queen.new(team_color), King.new(team_color)
+    return_row[0], return_row[7] = Rook.new(team_color, self), Rook.new(team_color, self)
+    return_row[1], return_row[6] = Knight.new(team_color, self), Knight.new(team_color, self)
+    return_row[2], return_row[5] = Bishop.new(team_color, self), Bishop.new(team_color, self)
+    return_row[3], return_row[4] = Queen.new(team_color, self), King.new(team_color, self)
     return_row
   end
 
@@ -182,7 +182,7 @@ class Board
   def pawn_row(team_color)
     return_row = []
     8.times do
-      return_row << Pawn.new(team_color)
+      return_row << Pawn.new(team_color, self)
     end
     return_row
   end
