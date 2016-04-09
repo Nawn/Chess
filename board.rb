@@ -151,9 +151,17 @@ class Board
     final_row[0], final_row[7] = war_row(@players[1].team_color), war_row(@players[0].team_color)
     #Set the next rows, to be full of pawns
     final_row[1], final_row[6] = pawn_row(@players[1].team_color), pawn_row(@players[0].team_color)
+
     2.upto(5) do |index| #Then for indices 2..5 (Empty space)
       final_row[index] = empty_row.clone #Set it to empty rows
     end
+
+    final_row.each_with_index do |array, array_index|
+      array.each_with_index do |piece, index|
+        piece.position = Board.ary_to_coord([array_index, index]) if piece.is_a? Piece
+      end
+    end
+
     final_row #Return the "Fresh board"
   end
 

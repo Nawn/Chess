@@ -1,4 +1,5 @@
 class Piece
+  attr_writer :position
   attr_reader :display, :team_color, :directions, :moved
   
   def self.directions
@@ -19,10 +20,12 @@ class Piece
     @distance = 0
     @moved = false
     @board = host_board
+    @position = nil
   end
 
-  def move
+  def move(input_coord)
     @moved = true
+    @position = input_coord
   end
 
   def ping(edit_array, start, direction, counter=0)

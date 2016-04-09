@@ -61,8 +61,10 @@ class Player
     start_piece = select(start)
     #def moves(input_rows, start_pos, distance = @distance, display = true)
 
-    board_array[Player.coord_string(start)[0]][Player.coord_string(start)[1]] = " "
-    board_array[Player.coord_string(destination)[0]][Player.coord_string(destination)[1]] = start_piece
-    start_piece.move
+    start_row, start_pos = Player.coord_string(start)
+    dest_row, dest_pos = Player.coord_string(destination)
+    board_array[start_row][start_pos] = " "
+    board_array[dest_row][dest_pos] = start_piece
+    start_piece.move(destination)
   end
 end
