@@ -47,11 +47,9 @@ class Piece
       if current_piece.team_color == @team_color #If it's on the same team
         return [] #Return nothing but an empty ary as to not include this pos as an option
       else
-        edit_array[current_row][current_position] = "\e[46m#{current_piece.display}\e[0m" #Change the spot to a highlighted square
         return [next_space] #Return this pos as a potential option
       end
     else
-      edit_array[current_row][current_position] = :X #If it's not a Piece, rather an empty space
       return [next_space] if counter == 1 #If we set a limit, and we're at 1, that means this is the last empty spot
       return ([next_space] + ping(edit_array, next_space, direction, counter)) if counter.zero? #If it's 0, then that means we didn't set a counter
       return ([next_space] + ping(edit_array, next_space, direction, counter-1)) #If we did set a counter, then return the next with a -1 to counter.
