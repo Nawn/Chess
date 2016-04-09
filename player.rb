@@ -33,7 +33,7 @@ class Player
 	  	start_coord = Player.player_input(gets.chomp)
 	  	start_piece = select(start_coord)
 	  	#def moves(input_rows, start_pos, distance = @distance, display = true)
-      moves = start_piece.moves(@board.rows, start_coord)
+      moves = start_piece.moves(start_coord)
       
       raise StandardError.new("\n\nNo moves available for piece at #{start_coord}, returning to Piece select\n\n".upcase) if moves.empty?
       acceptable_pos = ""

@@ -56,17 +56,21 @@ class Piece
     end
   end
 
-  def moves(input_rows, start_pos, display = true)
-    r = input_rows.is_a? Array
-    s = start_pos.is_a? String
+  def moves(display = true)
+    r = @board.rows.is_a? Array
+    s = @position.is_a? String
     raise ArgumentError.new("Input must be 8x8 Array, and Coordinate") unless r && s
     #Error Handling
 
-    print_rows = input_rows.map(&:dup) #Create a copy of the Board to fuck with
+    print_rows = @board.rows.map(&:dup) #Create a copy of the Board to fuck with
     potentials = [] #Declare empty array to hold all potentials
 
     @directions.each do |symbol|
-      potentials = potentials + ping(print_rows, start_pos, symbol, @distance) #For each direction you can go, 
+      potentials = potentials + ping(symbol, @distance) #For each direction you can go, 
+    end
+
+    potentials.each do |coord|
+      Board.mark(print_rows, coord)
     end
 
     puts Board.table(print_rows) if display
@@ -75,59 +79,48 @@ class Piece
 end
 
 class Pawn < Piece
-  def initialize(color_sym=nil, host_board)
+  def initialize(color_sym, host_board)
     super(color_sym, host_board)
     @distance = 1
     @directions = [:up, :upleft, :upright]
   end
 
-  def moves(input_rows, start_pos, display = true)
-    potential_moves = super(input_rows, start_pos, @distance, false) #Get an array of Coordinates upleft - upright
+  def moves(display = true)
+    moves = {}
+    @directions.each do |direction|
+      moves[direction] = Board.line(@position, direction)
+    end
+    potentials = []
 
-    temp_rows = input_rows.map(&:dup) #Copy rows so we can fuck with em
-
-    up = potential_moves.select {|elem| elem[0] == start_pos[0]} #Filter out only directly up Coordinates
-    diag = potential_moves - up #Filter out diagonals
-
-    unless up.empty? 
-      up_row, up_pos = Player.coord_string(up.first)
-      up_piece = temp_rows[up_row][up_pos] #Figure out what the piece above is
-      if up_piece.is_a? Piece #If it's a piece(Because pawn's can't cap spaces ahead, only diag)
-        up = up - [up.first] #Remove it.
-      else #If it's not a piece(Ergo, free space above us)
-        unless @moved #Find out if we moved already
-          next_coord = Board.line(up.first, :up) #If we haven't moved, we get another jump, check the next space
-          next_space = temp_rows[Player.coord_string(next_coord)[0]][Player.coord_string(next_coord)[1]] #Get reference of that object
-          if next_space == " " #If it's free to move to
-            up << next_coord #Add it to the queue of places to jump
+    moves.each do |key, value|
+      if key == :up
+        up_piece = @board.select(value)
+        unless up_piece.is_a?(Piece)
+          potentials = potentials + [value]
+          second_piece = Board.line(value, key)
+          unless @board.select(second_piece).is_a?(Piece)
+            potentials = potentials + [second_piece] unless @moved
           end
         end
-      end
-
-      up.each do |pos|
-        Board.mark(temp_rows, pos) #Then mark all the places we can get to.
-      end
-    end
-
-    diag.each do |pos| #As for the diagonals
-      current_piece = temp_rows[Player.coord_string(pos)[0]][Player.coord_string(pos)[1]]
-      if current_piece.is_a? Piece #If the diagonal space is a piece
-        if current_piece.team_color != @team_color #Check if it's an enemy
-          Board.mark(temp_rows, pos) #If so, mark em for Capping
+      else
+        cur_piece = @board.select(value)
+        if cur_piece.is_a? Piece
+          potentials = potentials + [value] if cur_piece.team_color != @team_color
         end
-      else #If it's not a piece
-        diag = diag - [pos] #Remove it from the potential moves, we can't just jump diagonal willy-nilly
       end
     end
 
-    puts Board.table(temp_rows) if display #Print out a display of potential moves
-    up + diag #Then return the array of potentials
+    print_rows = @board.rows.map(&:dup)
+    potentials.each {|coord| Board.mark(print_rows, coord)}
+
+    puts Board.table(print_rows)
+    potentials
   end
 end
 
 class Knight < Piece
   attr_reader :horizontals, :verticals
-  def initialize(color_sym=nil, host_board)
+  def initialize(color_sym, host_board)
     super(color_sym, host_board)
     #Knights and Kings have the same Class initial
     #Knights will have an n after their K, to make them distinct
@@ -136,32 +129,37 @@ class Knight < Piece
     @horizontals = Piece.directions[2..3]
   end
 
-  def moves(input_rows, start_pos, display = true)
-    temp_rows = input_rows.map(&:dup) #Copy rows so we can fuck with em
+  def moves(display = true)
     potential_moves = []
 
-      @verticals.each do |symbol|
-        begin
-          two_away = Board.line(Board.line(start_pos, symbol), symbol) #up, up/down, down
-          @horizontals.each do |h_symbol| 
-            potential_moves = potential_moves + ping(temp_rows, two_away, h_symbol, 1) #left, right
-          end
-        rescue ArgumentError => e
-          next
+    @verticals.each do |symbol|
+      begin
+        two_away = Board.line(Board.line(@position, symbol), symbol) #up, up/down, down
+        @horizontals.each do |h_symbol|
+          potential_moves = potential_moves + ping(h_symbol, 1, two_away) #left, right
         end
+      rescue ArgumentError => e
+        next
       end
+    end
 
-      @horizontals.each do |symbol|
-        begin
-          two_away = Board.line(Board.line(start_pos, symbol), symbol) #left, left/ right, right
+    @horizontals.each do |symbol|
+      begin
+        two_away = Board.line(Board.line(@position, symbol), symbol) #left, left/ right, right
 
-          @verticals.each do |v_symbol|
-            potential_moves = potential_moves + ping(temp_rows, two_away, v_symbol, 1)#up,down
-          end
-        rescue ArgumentError => e
-          next
+        @verticals.each do |v_symbol|
+          potential_moves = potential_moves + ping(v_symbol, 1, two_away)#up,down
         end
+      rescue ArgumentError => e
+        next
       end
+    end
+
+    temp_rows = @board.rows.map(&:dup)
+
+    potential_moves.each do |coord|
+      Board.mark(temp_rows, coord)
+    end
 
     puts Board.table(temp_rows) if display
     potential_moves

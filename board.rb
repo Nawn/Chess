@@ -112,6 +112,7 @@ class Board
 
   def turn
     flip(@players[0].team_color)
+    calibrate()
     player = @players.shift
     player.turn
     @players.push(player)
@@ -163,6 +164,14 @@ class Board
     end
 
     final_row #Return the "Fresh board"
+  end
+
+  def calibrate
+    @rows.each_with_index do |array, array_index|
+      array.each_with_index do |piece, index|
+        piece.position = Board.ary_to_coord([array_index, index]) if piece.is_a? Piece
+      end
+    end
   end
 
   def flip_check(input_symbol)
