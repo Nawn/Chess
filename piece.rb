@@ -173,13 +173,13 @@ class King < Piece
     @distance = 1
   end
 
-  def moves(input_rows, start_pos, display = true)
-    moves = super(input_rows, start_pos, @distance, false)
-    throwaway = input_rows.map(&:dup)
+  def moves(display = true)
+    moves = super(false)
+    throwaway = @board.rows.map(&:dup)
     acceptable = []
 
     moves.each do |coord|
-      acceptable = acceptable + [coord] unless threatened(input_rows, coord)
+      acceptable = acceptable + [coord] unless threatened(throwaway, coord)
     end
     
     acceptable.each do |coord|
@@ -196,13 +196,15 @@ class King < Piece
   end
 
   def king_check(input_rows, space)
-    dir = Piece.directions + Piece.diagonals
-    dir.each do |symbol|
-      row, pos = Player.coord_string(Board.line(space, symbol))
-      current = input_rows[row][pos]
+    @directions.each do |symbol|
+      begin
+        current = Board.select(input_rows, Board.line(space, symbol))
 
-      if current.is_a? King
-        return true if current.team_color != @team_color
+        if current.is_a? King
+          return true if current.team_color != @team_color
+        end
+      rescue
+        next
       end
     end
     false
@@ -211,9 +213,13 @@ class King < Piece
   def pawn_check(input_rows, space)
     to_check = [Board.line(space, :upright), Board.line(space, :upleft)]
     to_check.each do |coord|
-      current = input_rows[Player.coord_string(coord)[0]][Player.coord_string(coord)[1]]
-      if current.is_a? Pawn
-        return true if current.team_color != @team_color
+      begin
+        current = Board.select(input_rows, coord)
+        if current.is_a? Pawn
+          return true if current.team_color != @team_color
+        end
+      rescue
+        next
       end
     end
     false
@@ -221,20 +227,19 @@ class King < Piece
 
   def bishop_check(input_rows, space)
     potentials = []
-    throwaway = input_rows.map(&:dup)
 
     Piece.diagonals.each do |symbol|
-      #def ping(edit_array, start, direction, counter=0)
-      potentials = potentials + ping(throwaway, space, symbol)
+      #def ping(direction)
+      potentials = potentials + ping(symbol, 0, space)
     end
 
     pieces = potentials.select do |coord|
-      current = input_rows[Player.coord_string(coord)[0]][Player.coord_string(coord)[1]]
+      current = Board.select(input_rows, coord)
       current.is_a? Piece
     end
 
     pieces.any? do |piece|
-      current = input_rows[Player.coord_string(piece)[0]][Player.coord_string(piece)[1]]
+      current = Board.select(input_rows, piece)
       r = current.is_a? Bishop
       q = current.is_a? Queen
 
@@ -244,20 +249,19 @@ class King < Piece
 
   def rook_check(input_rows, space)
     potentials = []
-    throwaway = input_rows.map(&:dup)
 
     Piece.directions.each do |symbol|
       #def ping(edit_array, start, direction, counter=0)
-      potentials = potentials + ping(throwaway, space, symbol)
+      potentials = potentials + ping(symbol, 0, space)
     end
 
     pieces = potentials.select do |coord|
-      current = input_rows[Player.coord_string(coord)[0]][Player.coord_string(coord)[1]]
+      current = Board.select(input_rows, coord)
       current.is_a? Piece
     end
 
     pieces.any? do |piece|
-      current = input_rows[Player.coord_string(piece)[0]][Player.coord_string(piece)[1]]
+      current = Board.select(input_rows, piece)
       r = current.is_a? Rook
       q = current.is_a? Queen
 
@@ -267,23 +271,9 @@ class King < Piece
 
   def knight_check(input_rows, space)
     knight = Knight.new(@team_color, @board)
-    potential_knights = []
+    knight.position = space
 
-    knight.verticals.each do |symbol|
-      one_away = Board.line(space, symbol) #up, down
-      knight.horizontals.each do |h_symbol| 
-        target = Board.line(Board.line(one_away, h_symbol), h_symbol) #left, left/right, right
-        potential_knights = potential_knights + [target]
-      end
-    end
-
-    knight.horizontals.each do |symbol|
-      one_away = Board.line(space, symbol) #left, right
-      knight.verticals.each do |v_symbol| 
-        target = Board.line(Board.line(one_away, v_symbol), v_symbol) #up, up/down, down
-        potential_knights = potential_knights + [target]
-      end
-    end
+    potential_knights = knight.moves(false)
 
     potential_knights.each do |coord|
       begin
