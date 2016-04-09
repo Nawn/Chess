@@ -85,6 +85,18 @@ class Pawn < Piece
     @directions = [:up, :upleft, :upright]
   end
 
+  def move(input_coord)
+    if input_coord[1].to_i == 8
+      new_queen = Queen.new(@team_color, @board)
+      new_queen.move(input_coord)
+      queen_row, queen_pos = Player.coord_string(input_coord)
+      @board.rows[queen_row][queen_pos] = new_queen
+    else
+      @moved = true
+      @position = input_coord
+    end
+  end
+
   def moves(display = true)
     moves = {}
     @directions.each do |direction|
