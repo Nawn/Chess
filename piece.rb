@@ -1,5 +1,5 @@
 class Piece
-  attr_reader :display, :team_color, :directions, :moved, :distance
+  attr_reader :display, :team_color, :directions, :moved
   
   def self.directions
     [:up, :down, :left, :right]
@@ -9,7 +9,7 @@ class Piece
     [:upleft, :upright, :downleft, :downright]
   end
   
-  def initialize(color_sym = nil, host_board)
+  def initialize(color_sym, host_board)
     raise ArgumentError.new("Piece must be given team_color") if color_sym.nil?
     raise ArgumentError.new("requires Symbol of team_color") unless color_sym.is_a? Symbol
     @team_color = color_sym
@@ -56,7 +56,7 @@ class Piece
     end
   end
 
-  def moves(input_rows, start_pos, distance = @distance, display = true)
+  def moves(input_rows, start_pos, display = true)
     r = input_rows.is_a? Array
     s = start_pos.is_a? String
     raise ArgumentError.new("Input must be 8x8 Array, and Coordinate") unless r && s
@@ -66,7 +66,7 @@ class Piece
     potentials = [] #Declare empty array to hold all potentials
 
     @directions.each do |symbol|
-      potentials = potentials + ping(print_rows, start_pos, symbol, distance) #For each direction you can go, 
+      potentials = potentials + ping(print_rows, start_pos, symbol, @distance) #For each direction you can go, 
     end
 
     puts Board.table(print_rows) if display
@@ -81,8 +81,8 @@ class Pawn < Piece
     @directions = [:up, :upleft, :upright]
   end
 
-  def moves(input_rows, start_pos, distance = @distance, display = true)
-    potential_moves = super(input_rows, start_pos, distance, false) #Get an array of Coordinates upleft - upright
+  def moves(input_rows, start_pos, display = true)
+    potential_moves = super(input_rows, start_pos, @distance, false) #Get an array of Coordinates upleft - upright
 
     temp_rows = input_rows.map(&:dup) #Copy rows so we can fuck with em
 
@@ -136,7 +136,7 @@ class Knight < Piece
     @horizontals = Piece.directions[2..3]
   end
 
-  def moves(input_rows, start_pos, distance = @distance, display = true)
+  def moves(input_rows, start_pos, display = true)
     temp_rows = input_rows.map(&:dup) #Copy rows so we can fuck with em
     potential_moves = []
 
@@ -175,8 +175,8 @@ class King < Piece
     @distance = 1
   end
 
-  def moves(input_rows, start_pos, distance = @distance, display = true)
-    moves = super(input_rows, start_pos, distance, false)
+  def moves(input_rows, start_pos, display = true)
+    moves = super(input_rows, start_pos, @distance, false)
     throwaway = input_rows.map(&:dup)
     acceptable = []
 
