@@ -51,8 +51,7 @@ class Player
   end
 
   def select(input_string)
-    row, pos = Player.coord_string(input_string)
-    piece = @board.rows[row][pos]
+    piece = @board.select(input_string)
     raise StandardError.new("Space is empty") if piece == " "
     raise StandardError.new("Not your piece") unless piece.team_color == @team_color
     piece

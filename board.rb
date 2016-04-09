@@ -90,6 +90,15 @@ class Board
     end
   end
 
+  def self.select(input_rows, selected_coord)
+    row, pos = Player.coord_string(input_string)
+    input_rows[row][pos]
+  end
+
+  def select(selected_coord)
+    Board.select(@rows, selected_coord)
+  end
+
   def mark(position, object=:X)
     Board.mark(@rows, position, object)
   end
