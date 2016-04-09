@@ -244,10 +244,12 @@ describe Pawn do
       context "when white player" do
         it "does not change the Pawn to Queen" do
           expect(@board.select("D7")).to be_instance_of(Pawn)
+          expect(@board.select("D7").team_color).to eql(:white)
           expect(@board.select("D8")).to eql(" ")
           @white_player.move("D7", "D8")
           expect(@board.select("D7")).to eql(" ")
           expect(@board.select("D8")).to be_instance_of(Queen)
+          expect(@board.select("D8").team_color).to eql(:white)
         end
       end
 
@@ -258,10 +260,12 @@ describe Pawn do
 
         it "does not change the Pawn to Queen" do
           expect(@board.select("D7")).to be_instance_of(Pawn)
+          expect(@board.select("D7").team_color).to eql(:black)
           expect(@board.select("D8")).to eql(" ")
           @black_player.move("D7", "D8")
           expect(@board.select("D7")).to eql(" ")
           expect(@board.select("D8")).to be_instance_of(Queen)          
+          expect(@board.select("D8").team_color).to eql(:black)
         end
       end
     end
