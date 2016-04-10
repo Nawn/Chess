@@ -269,7 +269,9 @@ describe Player do
         empty_board[num] = empty_row.clone
       end
       @board.rows = empty_board
-      @board.mark("D4", King.new(:white, @board))
+      king_piece = King.new(:white, @board)
+      king_piece.position = "D4"
+      @board.mark("D4", king_piece)
     end
 
     context "when no other boards on the piece" do
@@ -305,6 +307,7 @@ describe Player do
         before(:each) do
           @board.mark("E5", Queen.new(:black, @board))
           @board.mark("B5", Queen.new(:black, @board))
+          @board.mark("H3", Rook.new(:black, @board))
         end
 
         it "will return true" do

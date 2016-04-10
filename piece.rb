@@ -206,6 +206,10 @@ class King < Piece
     acceptable
   end
 
+  def self_threatened
+    threatened(@board.rows, @position)
+  end
+
   private
   def threatened(input_rows, space)
     knight_check(input_rows, space) || rook_check(input_rows, space) || bishop_check(input_rows, space) || pawn_check(input_rows, space) || king_check(input_rows, space)

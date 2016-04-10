@@ -50,6 +50,23 @@ class Player
     end
   end
 
+  def checkmate?
+    our_king = nil
+    @board.rows.each do |row|
+      row.each do |obj|
+        if obj.is_a?(King)
+          if obj.team_color == @team_color
+            our_king = obj
+          end
+        end
+      end
+    end
+    king_moves = our_king.moves(false)
+    own_space = our_king.self_threatened
+    return true if king_moves.empty? && own_space
+    false
+  end
+
   def select(input_string)
     piece = @board.select(input_string)
     raise StandardError.new("Space is empty") if piece == " "
