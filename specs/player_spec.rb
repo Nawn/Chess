@@ -257,4 +257,71 @@ describe Player do
       end
     end
   end
+
+  describe "#checkmate?" do
+    before(:each) do
+      @board = Board.new
+      @white_player = @board.players[0]
+      @black_player = @board.players[1]
+      empty_row = Array.new(8, " ")
+      empty_board = []
+      8.times do |num|
+        empty_board[num] = empty_row.clone
+      end
+      @board.rows = empty_board
+      @board.mark("D4", King.new(:white, @board))
+    end
+
+    context "when no other boards on the piece" do
+      it "returns false" do
+        expect(@white_player.checkmate?).to be false
+      end
+    end
+
+    context "with other pieces on the board" do
+      context "if they are not interfering" do
+        before(:each) do
+          @board.mark("F6", Rook.new(:black, @board))
+          @board.mark("H4", Bishop.new(:black, @board))
+        end
+
+        it "will return false" do
+          expect(@white_player.checkmate?).to be false
+        end
+      end
+
+      context "if king is in check, but has places to go" do
+        before(:each) do
+          @board.mark("B6", Bishop.new(:black, @board))
+          @board.mark("G3", Rook.new(:black, @board))
+        end
+
+        it "will return false" do
+          expect(@white_player.checkmate?).to be false
+        end
+      end
+
+      context "when in check, and no available moves" do
+        before(:each) do
+          @board.mark("E5", Queen.new(:black, @board))
+          @board.mark("B5", Queen.new(:black, @board))
+        end
+
+        it "will return true" do
+          expect(@white_player.checkmate?).to be true
+        end
+      end
+
+      context "when in same position as checkmate, but ally pieces" do
+        before(:each) do
+          @board.mark("E5", Queen.new(:white, @board))
+          @board.mark("B5", Queen.new(:white, @board))          
+        end
+
+        it "will return false" do
+          expect(@white_player.checkmate?).to be false
+        end
+      end
+    end
+  end
 end
