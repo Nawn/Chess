@@ -129,7 +129,7 @@ class Pawn < Piece
     print_rows = @board.rows.map(&:dup)
     potentials.each {|coord| Board.mark(print_rows, coord)}
 
-    puts Board.table(print_rows)
+    puts Board.table(print_rows) if display
     potentials
   end
 end
