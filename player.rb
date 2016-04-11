@@ -52,10 +52,15 @@ class Player
 
   def checkmate?
     our_king = find_king
+    return true if our_king.is_a? Array #AKA, does not find any king, as in it was taken.
     king_moves = our_king.moves(false)
     own_space = our_king.self_threatened
     return true if king_moves.empty? && own_space
     false
+  end
+
+  def show_king
+    find_king
   end
 
   def stalemate?

@@ -1,5 +1,14 @@
 require_relative 'spec_helper.rb'
 
+def empty_board_gen
+  empty_row = Array.new(8, " ")
+  empty_board = []
+  8.times do |num|
+    empty_board[num] = empty_row.clone
+  end
+  empty_board
+end
+
 describe Board do
   describe "#new" do
     context "when given no input" do
@@ -322,6 +331,52 @@ describe Board do
             end
           end
         end
+      end
+    end
+  end
+
+  describe "over?" do
+    before(:each) do
+      @board = Board.new
+      @white_player = @board.players[0]
+      @black_player = @board.players[1]
+
+    end
+
+    context "when the next player has no stalemate/checkmate" do
+      it "returns false" do
+        expect(@board.over?).to be false
+      end
+    end
+
+    context "when the next player has been stalemated, but not checkmated" do
+      before(:each) do
+        @board.rows = empty_board_gen
+        to_add = [["E8", King.new(:black, @board)],["E6", Pawn.new(:white, @board)],["F6", Queen.new(:white, @board)],["A2", Pawn.new(:white, @board)],["B1", King.new(:white, @board)]]
+        to_add.each do |array|
+          array[1].position = array[0]
+          @board.mark(array[0], array[1])
+        end
+        @board.players[0], @board.players[1] = @board.players[1], @board.players[0]
+      end
+
+      it "returns true" do
+        expect(@board.over?).to be true
+      end
+    end
+
+    context "when the next player has been checkmated" do
+      before(:each) do
+        @board.rows = empty_board_gen
+        to_add = [["D4", King.new(:white, @board)],["E5", Queen.new(:black, @board)],["B5", Queen.new(:black, @board)],["H3", Rook.new(:black, @board)]]
+        to_add.each do |array|
+          array[1].position = array[0]
+          @board.mark(array[0], array[1])
+        end
+      end
+
+      it "returns true" do
+        expect(@board.over?).to be true
       end
     end
   end
