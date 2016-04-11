@@ -51,16 +51,7 @@ class Player
   end
 
   def checkmate?
-    our_king = nil
-    @board.rows.each do |row|
-      row.each do |obj|
-        if obj.is_a?(King)
-          if obj.team_color == @team_color
-            our_king = obj
-          end
-        end
-      end
-    end
+    our_king = find_king
     king_moves = our_king.moves(false)
     own_space = our_king.self_threatened
     return true if king_moves.empty? && own_space
@@ -83,5 +74,18 @@ class Player
     board_array[start_row][start_pos] = " "
     board_array[dest_row][dest_pos] = start_piece
     start_piece.move(destination)
+  end
+
+  private
+  def find_king
+    @board.rows.each do |row|
+      row.each do |obj|
+        if obj.is_a?(King)
+          if obj.team_color == @team_color
+            return obj
+          end
+        end
+      end
+    end
   end
 end
