@@ -5,7 +5,7 @@ class Player
   	exit if input_string.downcase == "exit"
   	potential_backs = %w(return back select)
   	raise StandardError.new("\n\nReturning to Piece select\n\n") if potential_backs.any? {|back_string| back_string == input_string.downcase}
-    raise SaveThrow.new("Saving game!") if input_string.downcase == "save"
+    raise SaveThrow.new("\n\nSaving game!\n\n") if input_string.downcase == "save"
   	input_string.gsub(/\s+/, "").upcase
   end
 

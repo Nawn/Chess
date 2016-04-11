@@ -124,6 +124,7 @@ class Board
       @players.push(player)
     rescue SaveThrow => e
       @players.unshift(player)
+      puts "#{e}"
       save()
       retry
     end
