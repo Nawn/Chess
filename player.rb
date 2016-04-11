@@ -59,10 +59,6 @@ class Player
     false
   end
 
-  def show_king
-    find_king
-  end
-
   def stalemate?
     @board.flip(@team_color)
     our_pieces = gather_pieces

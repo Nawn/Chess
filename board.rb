@@ -102,6 +102,10 @@ class Board
     input_rows[row][pos]
   end
 
+  def over?
+    @players[0].checkmate? || @players[0].stalemate?
+  end
+
   def select(selected_coord)
     Board.select(@rows, selected_coord)
   end
