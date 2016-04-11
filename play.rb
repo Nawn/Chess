@@ -21,7 +21,14 @@ until done
       board = Board.new(:multiplayer)
       select = true
     when 2
-      puts "Save/Load not implemented yet"
+      if File.exist?('save-file.yml')
+        puts "\n\nLoading Save Data...\n\n"
+        yaml_data = File.read('save-file.yml')
+        board = YAML.load(yaml_data)
+      else
+        puts "\n\nSave Data not found. Creating new board..\n\n"
+        board = Board.new(:multiplayer)
+      end
       select = true
     when 3
       exit

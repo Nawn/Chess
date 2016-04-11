@@ -1,7 +1,9 @@
 require 'terminal-table'
+require 'yaml'
 require_relative 'player.rb'
 require_relative 'piece.rb'
 
+class SaveThrow < ScriptError;end
 #"\e[46m#{knight.display}\e[0m"
 
 class Board
@@ -115,10 +117,16 @@ class Board
   end
 
   def turn
-    flip(@players[0].team_color)
-    player = @players.shift
-    player.turn
-    @players.push(player)
+    begin
+      flip(@players[0].team_color)
+      player = @players.shift
+      player.turn
+      @players.push(player)
+    rescue SaveThrow => e
+      @players.unshift(player)
+      save()
+      retry
+    end
   end
 
   def flip(color_sym=nil)
@@ -168,6 +176,12 @@ class Board
     end
 
     final_row #Return the "Fresh board"
+  end
+
+  def save
+    File.open('save-file.yml', 'w') do |file|
+      file.write(YAML.dump(self))
+    end
   end
 
   def calibrate
