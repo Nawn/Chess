@@ -58,6 +58,13 @@ class Player
     false
   end
 
+  def stalemate?
+    @board.flip(@team_color)
+    our_pieces = gather_pieces
+
+    return our_pieces.all? {|piece| piece.moves(false).empty?}
+  end
+
   def select(input_string)
     piece = @board.select(input_string)
     raise StandardError.new("Space is empty") if piece == " "
@@ -77,6 +84,22 @@ class Player
   end
 
   private
+  def gather_pieces
+    pieces = []
+
+    @board.rows.each do |row|
+      row.each do |obj|
+        if obj.is_a? Piece
+          if obj.team_color == @team_color
+            pieces << obj
+          end
+        end
+      end
+    end
+
+    pieces
+  end
+
   def find_king
     @board.rows.each do |row|
       row.each do |obj|
