@@ -1,16 +1,22 @@
 require_relative "spec_helper.rb"
 
-def test_board
+def empty_board_gen
   empty_row = Array.new(8, " ")
   empty_board = []
   8.times do |num|
     empty_board[num] = empty_row.clone
   end
+  empty_board
+end
+
+def test_board
+  empty_board = empty_board_gen
   empty_board[4][3] = Rook.new(:white, Board.new)
   empty_board[4][1] = Pawn.new(:black, Board.new)
   empty_board[4][6] = Pawn.new(:white, Board.new)
   empty_board
 end
+
 
 describe Player do
   describe "#new" do
@@ -263,12 +269,8 @@ describe Player do
       @board = Board.new
       @white_player = @board.players[0]
       @black_player = @board.players[1]
-      empty_row = Array.new(8, " ")
-      empty_board = []
-      8.times do |num|
-        empty_board[num] = empty_row.clone
-      end
-      @board.rows = empty_board
+
+      @board.rows = empty_board_gen
       king_piece = King.new(:white, @board)
       king_piece.position = "D4"
       @board.mark("D4", king_piece)
@@ -324,6 +326,53 @@ describe Player do
         it "will return false" do
           expect(@white_player.checkmate?).to be false
         end
+      end
+    end
+  end
+
+  describe "#stalemate?" do
+    before(:each) do
+      @board = Board.new
+      @white_player = @board.players[0]
+      @black_player = @board.players[1]
+    end
+
+    context "when board is fresh" do
+      it "returns false" do
+        expect(@white_player.stalemate?).to be false
+        expect(@black_player.stalemate?).to be false
+      end
+    end
+
+    context "when board has been moved, almost stalemating black, but not yet" do
+      before(:each) do
+        @board.rows = empty_board_gen
+        to_add = [["E8", King.new(:black, @board)],["E7", Bishop.new(:black, @board)],["E6", Pawn.new(:white, @board)],["B5", Rook.new(:black, @board)],["F3", Queen.new(:white, @board)],["A2", Pawn.new(:white, @board)],["A1", King.new(:white, @board)]]
+        to_add.each do |array|
+          array[1].position = array[0]
+          @board.mark(array[0], array[1])
+        end
+      end
+
+      it "returns false on white and black player" do
+        expect(@white_player.stalemate?).to be false
+        expect(@black_player.stalemate?).to be false
+      end
+    end
+
+    context "when black has been stalemated" do
+      before(:each) do
+        @board.rows = empty_board_gen
+        to_add = [["E8", King.new(:black, @board)],["E6", Pawn.new(:white, @board)],["F6", Queen.new(:white, @board)],["A2", Pawn.new(:white, @board)],["B1", King.new(:white, @board)]]
+        to_add.each do |array|
+          array[1].position = array[0]
+          @board.mark(array[0], array[1])
+        end
+      end
+
+      it "returns false for white player, but true on black" do
+        expect(@white_player.stalemate?).to be false
+        expect(@black_player.stalemate?).to be true
       end
     end
   end
