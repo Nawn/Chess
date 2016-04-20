@@ -1,7 +1,7 @@
 # Chess
 Building Chess for the Odin Project
 
-In order to use/play my version of chess, you'll need to have 
+In order to use/play my version of chess, you'll need to have<br>
 -Ruby installed
 -'gem install terminal-table'
 
