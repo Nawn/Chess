@@ -1,5 +1,6 @@
 # Chess
 Building Chess for the Odin Project
+  (http://www.theodinproject.com/)
 
 In order to use/play my version of chess, you'll need to have<br>
 -Ruby installed<br>
