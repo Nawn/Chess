@@ -2,11 +2,13 @@ class Player
   attr_reader :team_color, :board
 
   def self.player_input(input_string)
-  	exit if input_string.downcase == "exit"
-  	potential_backs = %w(return back select)
-  	raise StandardError.new("\n\nReturning to Piece select\n\n") if potential_backs.any? {|back_string| back_string == input_string.downcase}
+    exit if input_string.downcase == "exit"
+    potential_backs = %w(return back select)
+    
+    raise StandardError.new("\n\nReturning to Piece select\n\n") if potential_backs.any? {|back_string| back_string == input_string.downcase}
     raise SaveThrow.new("\n\nSaving game!\n\n") if input_string.downcase == "save"
-  	input_string.gsub(/\s+/, "").upcase
+    
+    input_string.gsub(/\s+/, "").upcase
   end
 
   def self.coord_string(input_string)
@@ -27,13 +29,13 @@ class Player
   end
 
   def turn
-  	begin
-  		puts "\n\n IT IS NOW #{@team_color.upcase}'S TURN\n\n"
-	  	@board.display
-	  	puts "Please input the coordinates of piece to grab"
-	  	start_coord = Player.player_input(gets.chomp)
-	  	start_piece = select(start_coord)
-	  	#def moves(input_rows, start_pos, distance = @distance, display = true)
+    begin
+      puts "\n\n IT IS NOW #{@team_color.upcase}'S TURN\n\n"
+      @board.display
+      puts "Please input the coordinates of piece to grab"
+      start_coord = Player.player_input(gets.chomp)
+      start_piece = select(start_coord)
+      #def moves(input_rows, start_pos, distance = @distance, display = true)
       moves = start_piece.moves(start_coord)
       
       raise StandardError.new("\n\nNo moves available for piece at #{start_coord}, returning to Piece select\n\n".upcase) if moves.empty?
