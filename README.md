@@ -1,6 +1,8 @@
 # Chess
-Building Chess for the Odin Project
-  (http://www.theodinproject.com/)
+Hello! I built this chess as a test for 
+
+
+![Basic Gameplay](https://raw.githubusercontent.com/Nawn/Chess/master/chess-basic.JPG)
 
 In order to use/play my version of chess, you'll need to have<br>
 -Ruby installed<br>
