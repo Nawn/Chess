@@ -25,7 +25,7 @@ run `gem install terminal-table` to install the required gem.
 
 You will simply enter the coordinates, relative to your view to control the piece. My code will check to see if the piece can move based on it's own movement rules and then present all available choices.
 
-![Chess Choice](https://raw.githubusercontent.com/Nawn/Chess/master/chess-choice.PNG)
+![Chess Choice](https://raw.githubusercontent.com/Nawn/Chess/master/chess-choices.PNG)
 
 You will continue back and forth, until the king has been checkmated and the game is over. 
 
