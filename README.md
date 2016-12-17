@@ -1,14 +1,32 @@
 # Chess
-Hello! I built this chess as a test for 
+Hello! I built this chess as a test for my skills using Ruby, and limitations on visuals (such as only ASCII art)
 
+This is a CMD/Terminal basic Chess, available for 2 players only. I was initially going to build a Chess playing AI, but I decided
+against it in order to save myself some time to work on other projects. The game features a very basic save/load mechanic. 
 
-![Basic Gameplay](https://raw.githubusercontent.com/Nawn/Chess/master/chess-basic.JPG)
+In order to use this code, you will need ruby installed on your computer, as well as the Gem "terminal-table", which I used
+to draw out my data structure in the cmd.
 
-In order to use/play my version of chess, you'll need to have<br>
--Ruby installed<br>
--'gem install terminal-table'
+##Installation
+run `gem install terminal-table` to install the required gem.
 
-Those are the only things that my code depends on.
+##Usage
+1. Navigate to folder in cmd/terminal
+2. Enter `ruby play.rb`
+3. Begin playing!
 
-##Change directory to the directory you save these files in.
-type 'ruby play.rb' and you'll begin to play Chess!
+![Main Menu](https://raw.githubusercontent.com/Nawn/Chess/master/chess-menu.PNG)
+
+1. Single Player - Synonymous with "Start", sorry for the confusion
+2. Load - Will check if yml file exists, if so load it. 
+3. Exit - Closes the program
+
+![Chess Turn](https://raw.githubusercontent.com/Nawn/Chess/master/chess-turn.PNG)
+
+You will simply enter the coordinates, relative to your view to control the piece. My code will check to see if the piece can move based on it's own movement rules and then present all available choices.
+
+![Chess Choice](https://raw.githubusercontent.com/Nawn/Chess/master/chess-choice.PNG)
+
+You will continue back and forth, until the king has been checkmated and the game is over. 
+
+*Thank you very much for your time*
